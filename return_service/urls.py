@@ -18,7 +18,9 @@ from django.urls import path
 from django.conf.urls import url
 from django.views.generic.base import TemplateView
 from myapp import views
-from .apis import user
+import sys
+sys.path.append("..")
+from myapp.apis import user
 
 urlpatterns = [
     path('admin/', admin.site.urls),

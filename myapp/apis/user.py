@@ -90,9 +90,9 @@ def login_helper(info):
         return (-3, const_table.const.WRONG_ACCOUNT)
 
 @ensure_csrf_cookie
-def enterprise_login(request):
+def login(request):
     """
-    企业登录\n
+    用户登录\n
     * **request** - 前端发送的请求，包含邮箱，密码\n
     **返回值**: 包含成功/失败信息的JsonResponse\n
     """
