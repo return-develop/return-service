@@ -9,6 +9,7 @@ import json, hashlib, time
 from django.conf import settings
 from .models import User
 from .models import Subject
+from .models import Subrelation
 
 @ensure_csrf_cookie
 def user_login(request):
@@ -87,6 +88,96 @@ def subject_add(request):
                 dic['result_code'] = 200
                 dic = json.dumps(dic)
                 return HttpResponse(dic)
+    else:
+        dic['result_code'] = 400
+        dic = json.dumps(dic)
+        return HttpResponse(dic)
+
+def subject_delete(request):
+    '''删除学科分类'''
+    dic = {}
+    if request.method == 'POST':
+        if request.POST:
+            nametemp = request.POST.get('name')
+            delsubject = Subject.objects.get(name = nametemp)
+            delsubject.delete()
+            dic['result_code'] = 200
+            dic = json.dumps(dic)
+            return HttpResponse(dic)
+    else:
+        dic['result_code'] = 400
+        dic = json.dumps(dic)
+        return HttpResponse(dic)
+
+def subject_update(request):
+    '''修改学科分类'''
+    dic = {}
+    if request.method == 'POST':
+        if request.POST:
+            nametemp = request.POST.get('name')
+            altersubject = Subject.objects.get(name = nametemp)
+            altersubject.name = nametemp
+            altersubject.save()
+            dic['result_code'] = 200
+            dic = json.dumps(dic)
+            return HttpResponse(dic)
+    else:
+        dic['result_code'] = 400
+        dic = json.dumps(dic)
+        return HttpResponse(dic)
+
+def subject_view(request):
+    '''查看学科分类'''
+    dic = {}
+    if request.method == 'GET':
+        subjecttemp = Subject.objects.filter()
+        dic['list'] = json.loads(
+            serializers.serialize("json", subjecttemp)
+        )
+        dic['result_code'] = 200
+        dic = json.dumps(dic)
+        return HttpResponse(dic)
+    else:
+        dic['result_code'] = 400
+        dic = json.dumps(dic)
+        return HttpResponse(dic)
+
+def subrelation_add(request):
+    '''新增学科关系'''
+    dic = {}
+    if request.method == 'POST':
+        if request.POST:
+            fathernametemp = request.POST.get('fathername')
+            sonnametemp = request.POST.get('sonname')
+            if Subject.objects.filter(name = fathernametemp):
+                if Subject.objects.filter(name = sonnametemp):
+                    if Subrelation.objects.filter(fathername = fathernametemp, sonname = sonnametemp):
+                        dic['result_code'] = 401
+                        dic = json.dumps(dic)
+                        return HttpResponse(dic)
+                    else:
+                        newsubject = Subject(fathername = fathernametemp, sonname = sonnametemp)
+                        newsubject.save()
+                        dic['result_code'] = 200
+                        dic = json.dumps(dic)
+                        return HttpResponse(dic)
+    else:
+        dic['result_code'] = 400
+        dic = json.dumps(dic)
+        return HttpResponse(dic)
+
+def subrelation_delete(request):
+    '''删除学科关系'''
+    dic = {}
+    if request.method == 'POST':
+        if request.POST:
+            fathernametemp = request.POST.get('fathername')
+            sonnametemp = request.POST.get('sonname')
+            delsubrelation = Subrelation.objects.get(fathername = fathernametemp, sonname = sonnametemp)
+            delsubrelation.delete()
+            dic['result_code'] = 200
+            dic = json.dumps(dic)
+            return HttpResponse(dic)
     else:
         dic['result_code'] = 400
         dic = json.dumps(dic)

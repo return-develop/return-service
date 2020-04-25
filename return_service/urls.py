@@ -29,5 +29,10 @@ urlpatterns = [
     path('user_logout/', user.logout, name = 'logout'),
     path('user_add_info', views.user_add_info),
     path('user_view_info', views.user_view_info),
-    path('subject_add', views.subject_add)
+    path('subject_add', views.subject_add),
+    path('subject_delete', views.subject_delete),
+    path('subject_update', views.subject_update),
+    path('subject_view', views.subject_view),
+    path('subrelation_add', views.subrelation_add),
+    path('subrelation_delete', views.subrelation_delete)
 ]
