@@ -79,10 +79,11 @@ WSGI_APPLICATION = 'return_service.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'returnservice',
-        'USER': 'root',
-        'PASSWORD': '19730628ma',
         'HOST': '127.0.0.1',
+        'PORT': 3306,
+        'NAME': 'testdjango',
+        'USER': 'root',
+        'PASSWORD': '',
 
     }
 }
