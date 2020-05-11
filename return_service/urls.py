@@ -34,5 +34,15 @@ urlpatterns = [
     path('subject_update', views.subject_update),
     path('subject_view', views.subject_view),
     path('subrelation_add', views.subrelation_add),
-    path('subrelation_delete', views.subrelation_delete)
+    path('subrelation_delete', views.subrelation_delete),
+    path('subrelation_update', views.subrelation_update),
+    path('subrelation_view', views.subrelation_view),
+    path('city_add', views.city_add),
+    path('city_detele', views.city_delete),
+    path('city_update', views.city_update),
+    path('city_view', views.city_view),
+    path('cityrelation_add', views.cityrelation_add),
+    path('cityrelation_delete', views.cityrelation_delete),
+    path('cityrelation_update', views.cityrelation_update),
+    path('cityrelation_view', views.cityrelation_view)
 ]
