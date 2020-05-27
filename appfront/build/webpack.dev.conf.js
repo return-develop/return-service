@@ -53,8 +53,15 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
+      chunks:['datav1'],
       filename: 'index.html',
       template: 'index.html',
+      inject: true
+    }),
+    new HtmlWebpackPlugin({
+      chunks:['datav2'],
+      filename: 'user_login.html',
+      template: '../src/components/login/user_login.html',
       inject: true
     }),
     // copy custom static assets

@@ -21,12 +21,20 @@ from myapp import views
 import sys
 sys.path.append("..")
 from myapp.apis import user
+from myapp import api
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('user_login/', user.login, name = 'login'),
+    url(r'^$', api.index, name='index'),
+    url(r'^user_login/$', TemplateView.as_view(template_name = 'user_login.html')),
+    url(r'^user_register/$', TemplateView.as_view(template_name = 'user_register.html')),
+    url(r'^user_activate/$', TemplateView.as_view(template_name = 'user_activate.html')),
+    # url(r'^user_register/user_activate/$', TemplateView.as_view(template_name = 'user_activate.html')),
+    url(r'^user_register/#/user_activate/$', TemplateView.as_view(template_name = 'user_activate.html')),
+    url(r'^home/$', TemplateView.as_view(template_name = 'home_page.html')),
     path('user_signup/', user.signup, name = 'signup'),
     path('user_logout/', user.logout, name = 'logout'),
+<<<<<<< Updated upstream
     path('user_add_info', views.user_add_info),
     path('user_view_info', views.user_view_info),
     path('subject_add', views.subject_add),
@@ -45,4 +53,12 @@ urlpatterns = [
     path('cityrelation_delete', views.cityrelation_delete),
     path('cityrelation_update', views.cityrelation_update),
     path('cityrelation_view', views.cityrelation_view)
+=======
+
+    # api
+    url(r'^api/findback_password/$', user.logout),  #todo   
+    url(r'^api/user/login/$', user.login, name = 'login'),
+    url(r'^api/user/signup/$', user.signup, name = 'signup'),
+    # url(r'^api/user/activate/$', user.activate, name = 'activate'),
+>>>>>>> Stashed changes
 ]

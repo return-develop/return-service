@@ -3,9 +3,25 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>appfront</title>
+    <title>归来</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/static/img/logo.jpg" id="favicon" />
+    <link rel="stylesheet" type="text/css" href="/static/css/navigation.css">
   </head>
   <body>
+    <ul class="topmenu">
+        <li><a href="/home" class="active">首页</a></li>
+        <li><a href="/consult">就业咨询</a></li>
+        <span>
+            <li class="login-register">
+                <img src="/static/img/curry.jpg">
+                <a href="/user_login" class="login-nav">登录</a>/
+                <a href="/user_register" class="register-nav">注册</a></li>
+            <li class="book">
+                <img src="/static/img/wechat-1.jpg">
+                <a href="/book" class="book-nav">订阅公众号</a>
+            </li>
+        </span>
+    </ul>
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>

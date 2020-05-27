@@ -4,6 +4,10 @@ const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 
+const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
@@ -22,20 +26,25 @@ const createLintingRule = () => ({
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
-    app: './src/main.js'
+    // app: './src/main.js',
+    app: './src/main.js',
+    user_login: './src/components/login/user_login.js',
+    user_register: './src/components/register/user_register.js',
+    user_activate: './src/components/activate/user_activate.js',
+    home_page: './src/components/home/home_page.js'
   },
   output: {
     path: config.build.assetsRoot,
-    filename: '[name].js',
+    filename: 'js/[name].js',
     publicPath: process.env.NODE_ENV === 'production'
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath
   },
   resolve: {
-    extensions: ['.js', '.vue', '.json'],
+    extensions: ['.js', '.vue', '.json', '.css'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      '@': resolve('src'),
+      '@': resolve('src')
     }
   },
   module: {
@@ -77,6 +86,28 @@ module.exports = {
       }
     ]
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      chunks:['app'],
+      filename: 'index.html',
+      template: 'index.html',
+      inject: true
+    }),
+    new HtmlWebpackPlugin({
+      chunks:['user_login'],
+      filename: 'user_login.html',
+      template: './src/components/login/user_login.html',
+      inject: true
+    }),
+    // copy custom static assets
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(__dirname, '../static'),
+        to: config.dev.assetsSubDirectory,
+        ignore: ['.*']
+      }
+    ])
+  ],
   node: {
     // prevent webpack from injecting useless setImmediate polyfill because Vue
     // source contains it (although only uses it if it's native).
