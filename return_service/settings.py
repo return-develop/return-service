@@ -79,17 +79,9 @@ WSGI_APPLICATION = 'return_service.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-<<<<<<< Updated upstream
-=======
         'NAME': 'mysql',
         'USER': 'root',
         'PASSWORD': 'return2020',
->>>>>>> Stashed changes
-        'HOST': '127.0.0.1',
-        'PORT': 3306,
-        'NAME': 'testdjango',
-        'USER': 'root',
-        'PASSWORD': '',
 
     }
 }

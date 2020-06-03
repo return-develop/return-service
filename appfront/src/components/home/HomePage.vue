@@ -1,5 +1,24 @@
 <template>
     <div class="container">
+        <ul class="topmenu">
+            <li><a href="/home" class="active">首页</a></li>
+            <li class="job-consult"><a href="/consult/">就业咨询</a></li>
+            <span>
+                <li class="login-register">
+                    <button class="dropbtn"><img src="../../../static/img/curry.jpg"></button>
+                    <a href="/user_login" class="login-nav">登录</a>/
+                    <a href="/user_register" class="register-nav">注册</a>
+                    <div class="dropdown-content">
+                        <a href="/">个人中心</a>
+                        <a href="/">注销退出</a>
+			        </div>
+                </li>
+                <li class="book">
+                    <img src="../../../static/img/wechat-1.jpg">
+                    <a href="/book" class="book-nav">订阅公众号</a>
+                </li>
+            </span>
+        </ul>
         <div class="header">
             <div class="h-tips">
                 <p>成为会员，不错过任何招聘</p>
@@ -150,6 +169,33 @@
     }
 </script>
 <style>
+    .dropbtn {
+       background-color: #272727;
+       border: none;
+    }
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: white;
+        min-width: 90px;
+        border-radius: 5px;
+        z-index: 999;
+        /* box-shadow:  0px 8px 16px 0px rgba(0,0,0,0.2); */
+    }
+    .dropdown-content a {
+        color: #000000!important;
+        padding: 5px!important;
+        text-decoration: none;
+        display: block;
+    }
+    .dropdown-content a:hover {
+        background-color: #f1f1f1!important;
+        border-radius: 5px;
+    }
+    .login-register:hover .dropdown-content {
+        display: flex;
+        flex-direction: column;
+    }   
     .header{
         width: 100%;
         height: 5em;
