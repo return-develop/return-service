@@ -8,17 +8,19 @@ body{
     margin: 0;
     padding: 0;
     overflow: hidden;
+    height: 36px;
     background-color:#272727;
 }
 .topmenu li {
     float: left;
+    line-height: 36px;
 }
 .topmenu li a {
     display: inline-block;
     color: white;
-    font-size: 0.9em;
+    font-size: 1em;
     text-align: center;
-    padding: 5px 16px;
+    padding: 0 16px;
     text-decoration: none;
 }
 .topmenu li a:hover {

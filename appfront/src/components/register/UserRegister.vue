@@ -162,15 +162,15 @@ a.login-style:hover {
     text-decoration: none;
 }
 .user-register{
-    height: 24em;
+    height: 26em;
     border: 0.6mm solid #FDF5E6;
-    border-radius: 0.1rem;
-    margin-top: 2vh;
+    border-radius: 0.5rem;
+    margin-top: 0.5em;
 }
 .title {
   text-align: center;
-  margin-bottom: 2vh;
-  margin-top: 2vh;
+  margin-bottom: 0.5em;
+  margin-top: 1em;
   font-size: 1.5rem;
 }
 .container {
@@ -183,22 +183,22 @@ a.login-style:hover {
 .item{
   width: 28vw;
   font-size: 0.9em;
-  margin-top: 2vh;
+  margin-top: 0;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 0.2vh;
+  margin-bottom: 0.5em;
 }
 .user-input {
   width: 28vw;
   height: 2.2em;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 2vh;
+  margin-bottom: 0.5em;
   border-color: blue;
 }
 .my-button{
   height: 2.2em;
-  margin-top: 4vh;
+  margin-top: 2em;
 }
 .btn {
   display: block;

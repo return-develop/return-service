@@ -165,12 +165,12 @@ a.register-style:hover {
   height: 20em;
   border: 0.6mm solid #FDF5E6;
   border-radius: 0.5rem;
-  margin-top: 2vh;
+  margin-top: 0.5em;
 }
 .title {
   margin-left: 9%;
-  margin-bottom: 2vh;
-  margin-top: 2vh;
+  margin-bottom: 0.8em;
+  margin-top: 0.8em;
   font-size: 1.5em;
 }
 .user-input {
@@ -178,7 +178,6 @@ a.register-style:hover {
   height: 2.2em;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 2vh;
   border-color: blue;
 }
 .btn {
@@ -201,10 +200,10 @@ a.register-style:hover {
 .item{
   width: 28vw;
   font-size: 0.9em;
-  margin-top: 4vh;
+  margin-top: 1em;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 1vh;
+  margin-bottom: 0.5em;
 }
 .item a{
   float:right;
