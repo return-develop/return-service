@@ -1,5 +1,6 @@
 <template>
   <div class="app">
+    <div class="menu"><navigation></navigation></div>
     <div class="wrap">
       <div class="ask_register">
          <p>没有账号？<a href="/user_register" class="register-style">请注册</a></p>
@@ -21,8 +22,8 @@
         </div>
         <p class="signup"><a></a></p>
         <Modal
-        v-model="findback.modal"
-        title="找回密码"
+          v-model="findback.modal"
+          title="找回密码"
           @on-ok="ok"
           @on-cancel="cancel">
           <p>请输入邮箱</p>
@@ -34,7 +35,9 @@
 </template>
 <script>
   import global_ from '../Const' 
+  import navigation from '../navigation'
   export default {
+    components: {navigation},
     data () {
       return {
         formItem: {

@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <div class="menu"><navigation></navigation></div>
     <div class="container">
         <div class="ask-login">
           <p>已有账号？<a href="/user_login" class="login-style">请登录</a></p>
@@ -31,6 +32,7 @@
 </template>
 <script>
   import global_ from '../Const'
+  import navigation from '../navigation'
   // import Router from 'vue-router'
   // import UserActivate from '@/components/activate/UserActivate'
   // let router = new Router({
@@ -43,6 +45,7 @@
   //       ]
   //     })
   export default {
+    components: {navigation},
     data () {
       return {
         formItem: {

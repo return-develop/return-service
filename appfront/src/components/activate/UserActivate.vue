@@ -1,21 +1,26 @@
 <template>
-    <div class="app">
-        <h3 class="title">还差一步，激活账号</h3>
-        <div class="item">
-          输入邮箱中获得的激活码
-          <span value="点击获取激活码" @click="settime">{{content}}</span>
-        </div>
-        <div class="user-input">
-          <Input v-model="formItem.active_code" placeholder="激活码" type="text" class="customer-input">
-        </div>
-        <div class="my-button">
-            <Button type="primary" @click="submit" class="btn1">激活账号</Button>
-            <Button type="primary" @click="goToEmailLogin(formItem.email)" class="btn2">前往邮箱</Button>
-        </div>
-    </div>
+  <div>
+      <div class="menu"><navigation></navigation></div>
+      <div class="app">
+          <h3 class="title">还差一步，激活账号</h3>
+          <div class="item">
+            输入邮箱中获得的激活码
+            <span value="点击获取激活码" @click="settime">{{content}}</span>
+          </div>
+          <div class="user-input">
+            <Input v-model="formItem.active_code" placeholder="激活码" type="text" class="customer-input">
+          </div>
+          <div class="my-button">
+              <Button type="primary" @click="submit" class="btn1">激活账号</Button>
+              <Button type="primary" @click="goToEmailLogin(formItem.email)" class="btn2">前往邮箱</Button>
+          </div>
+      </div>
+  </div>
 </template>
 <script>
+import navigation from '../navigation'
 export default {
+    components:{navigation},
     data () {
       return {
         formItem: {
