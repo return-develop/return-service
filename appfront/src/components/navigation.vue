@@ -1,17 +1,26 @@
 <template>
     <ul class="topmenu">
-        <li><a href="/home" class="active">首页</a></li>
-        <li><a href="/consult">就业咨询</a></li>
-        <span>
-            <li class="login-register">
-                <button class="dropbtn"><img src="../../static/img/profile.jpg"></button>
-                <a href="/user_login" class="login-nav">登录</a>
-                <a href="/user_register" class="register-nav">注册</a>
-                <div class="dropdown-content" v-if="isShow">
-                    <a href="/" >个人中心</a>
-                    <a href="/" >注销退出</a>
-                </div>
-            <li class="book">
+        <li class="menu-item"><a href="/home" class="active">首页</a></li>
+        <li class="menu-item"><a href="/consult">就业咨询</a></li>
+        <span class="else-item">
+            <li class="login-register menu-item">
+                    <button class="dropbtn"><img src="../../static/img/profile.jpg"></button>
+                    <a href="/user_login" class="login-nav" v-if="!isShow">登录</a>
+                    <Divider type="vertical" v-if="!isShow"/>
+                    <a href="/user_register" class="register-nav" v-if="!isShow">注册</a>
+                    <span style="padding: 0 10px;font-size: 12px;color: white;line-height: 36px" v-if="isShow">你好，{{username}}</span>
+                    <div class="dropdown-content" v-if="dropShow">
+                        <a href="/mycenter" >个人中心</a>
+                        <a href="/" >退出登录</a>
+                    </div>
+                    <!-- <Dropdown v-if="isShow">
+                        <a style="padding: 0 10px;font-size: 12px" >你好，{{username}}</a>
+                        <DropdownMenu slot="list">
+                            <DropdownItem><span style="color:#272727;line-height: 36px;padding: 5px" @click="toCenter">个人中心</span></DropdownItem>
+                            <DropdownItem><span style="color:#272727;line-height: 36px" @click="toLogout">退出登录</span></DropdownItem>
+                        </DropdownMenu>
+                    </Dropdown> -->
+            <li class="book menu-item">
                 <img src="../../static/img/wechat-1.jpg">
                 <a href="/book" class="book-nav">订阅公众号</a>
             </li>
@@ -22,10 +31,30 @@
     export default {
         data () {
             return{
-                isShow: false
+                isShow: true,
+                dropShow: true,
+                username: '黄布莱恩特'
             }
         },
-        method: {
+        created() {
+            var url = window.location.href.split('/').filter(function (s) { return s && s.trim()})[2]
+            console.log(url)
+            if (url == 'company' || url == 'home'){
+                this.isShow = false;
+                this.dropShow = false;
+            }
+            else {
+                this.isShow = true;
+                this.dropShow = true;
+            }
+        },
+        methods: {
+            toCenter() {
+                window.location.href = "/mycenter"
+            },
+            toLogout() {
+                window.location.href = "/"
+            }
         }
     }
 </script>
@@ -43,11 +72,11 @@
     height: 36px;
     background-color:#272727;
 }
-.topmenu li {
+.menu-item {
     float: left;
     line-height: 36px;
 }
-.topmenu li a {
+.menu-item a {
     display: inline-block;
     color: white;
     font-size: 14px;
@@ -55,8 +84,8 @@
     padding: 0 16px;
     text-decoration: none;
 }
-.topmenu li a:hover {
-    background-color: #222;
+.menu-item a:hover {
+    background-color: rgb(63, 60, 60);
     color: white;
     font-weight: bold;
 }
@@ -66,7 +95,7 @@
     /* background-color: rgb(91, 76, 175); */
 }
 
-.topmenu span{
+.else-item{
     float: right;
     font-size: 0.9em;
 }
@@ -80,11 +109,7 @@ ul span a.login-nav{
     padding-right: 2px;
 }
 
-ul span a.register-nav{
-    padding-left: 0px!important;
-}
-
-ul span a.book-nav{
+.register-nav, .book-nav{
     padding-left: 0px!important;
 }
 ul span li img{
@@ -101,7 +126,7 @@ ul span li img{
     display: none;
     position: absolute;
     background-color: white;
-    min-width: 90px;
+    width: 150px;
     border-radius: 5px;
     z-index: 999;
     /* box-shadow:  0px 8px 16px 0px rgba(0,0,0,0.2); */

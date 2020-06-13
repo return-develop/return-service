@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="app">
         <div class="menu"><navigation></navigation></div>
         <div class="header">
             <div class="h-tips">
@@ -13,6 +13,7 @@
                 <p>{{message}}</p>
             </div>
         </div>
+        <div class="breadcrumb"><CrumbVideo @getContent="getContent"></CrumbVideo></div>
         <div class="content">
             <div class="l-content">
                 <div class="consult">
@@ -37,28 +38,8 @@
                 </div>
             </div>
             <div class="r-content">
-                <div class="video">
-                    <CarousalVideo></CarousalVideo>
-                </div>
-                <div class="job-note">
-                    我们为你提供全国：
-                </div>
-                <div class="job-display">
-                    <div class="l-display">
-                        <div class="center-display">
-                            <span>{{jobNum}}</span>个<br>
-                            <p>岗位信息</p>
-                        </div>
-                    </div>
-                    <div class="r-display">
-                        <div class="center-display">
-                            <span>{{companyNum}}</span>家<br>
-                            <p>岗位信息</p>
-                        </div>
-                    </div>
-                </div>
                 <div class="company-display">
-                    <CompanyDisplay></CompanyDisplay>
+                    <CompanyDisplay :saveSum="saveSum" :letter="letter"></CompanyDisplay>
                 </div>
             </div>
         </div>
@@ -67,24 +48,24 @@
 </template>
 <script>
     import navigation from '../navigation'
-    import SelectSubject from './SelectSubject'
-    import SelectCity from './SelectCity'
-    import SelectSalary from './SelectSalary'
-    import CarousalVideo from './CarousalVideo'
+    import CrumbVideo from './CrumbVideo'
+    import SelectSubject from '../home/SelectSubject'
+    import SelectCity from '../home/SelectCity'
+    import SelectSalary from '../home/SelectSalary'
     import CompanyDisplay from './CompanyDisplay'
     import Footer from '../Footer'
     export default {
-        components: {navigation, SelectSubject, SelectCity, SelectSalary, CarousalVideo, CompanyDisplay, Footer},
+        components: {navigation, CrumbVideo, SelectSubject, SelectCity, SelectSalary, CompanyDisplay, Footer},
         data () {
-            return{
+            return {
                 num: 9999,
-                jobNum: 17182,
-                companyNum: 482,
+                saveSum: 7,
+                letter: '',
                 formItem: {
                     email: '',
                     password: ''
                 },
-                message: ''
+                 message: ''
             }
         },
         methods: {
@@ -146,16 +127,24 @@
                 this.message = '账号不存在!'
                 }
             },
-            selectCompany () {
-                this.$Message.success('1111')
-                console.log('000000')
-                window.location.href = '/company'
+            selectCompany() {
+                window.location.href = '/'
             },
-            
+            getContent (res) {
+                this.letter = res
+                this.$Message.error(res);
+                console.log('fu' + this.letter)
+            }
+            // showTotal (res) {
+            //     this.selectSum = res
+            // }
         }
     }
 </script>
-<style>
+<style scoped>
+    .app {
+        width: 100%;
+    }
     .header{
         width: 100%;
         height: 5em;
@@ -205,6 +194,9 @@
         color: red;
         margin-left: 4px;
     }
+    .breadcrumb{
+        margin: 2vh 8vw 0;
+    }
     .content{
         width: 100%;
         display:flex;
@@ -252,10 +244,6 @@
         display: initial;
         float: none;
     }
-    label {
-        display: initial;
-        float: right;
-    }
     .select{
         width: 100%;
         margin-top: 2vh;
@@ -279,48 +267,9 @@
     .subject .city .salary{
         margin-top: 2vh;
     }
-    .video{
-        width: 100%;
-        height: 16em;
-    }
-    .job-note{
-        margin-top: 2vh;
-        margin-bottom: 2vh;
-        text-align: center;
-        font-size: 1em;
-        font-weight: 400;
-        color: black;
-    }
-    .job-display{
-        display: flex;
-        height: 6em;
-        color: white;
-    }
-    .l-display, .r-display{
-        height: 100%;
-        width: 48%;
-        display: table;
-        text-align: center;
-        background-color: #755c5c;
-        border-radius: 3px;
-    }
-    .r-display{
-        margin-left: 4%;
-        
-    }
-    .center-display{
-        display: table-cell;
-        vertical-align: middle;
-    }
-    .l-display span, .r-display span{
-        font-size: 1.8em;
-    }
-    .l-display label, .r-display label{
-        font-size: 0.9em;
-    }
+    
     .company-display{
         width: 100%;
         height: fit-content;
-        margin: 2vh 0;
     }
 </style>

@@ -89,7 +89,7 @@ export default {
     margin-left: 12px;
     list-style-type:none;
     color:black;
-    font-size: 1.2em;
+    font-size: 1.1em;
     font-weight: 600;
 }
 .sp {

@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import UserLogin from './UserLogin'
-import iView from 'iview'
-import 'iview/dist/styles/iview.css'
+import viewDesign from 'view-design'
+import 'view-design/dist/styles/iview.css'
 
-Vue.use(iView)
+Vue.use(viewDesign)
 
 /* eslint-disable no-new */
 new Vue({

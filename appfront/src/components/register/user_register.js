@@ -3,11 +3,11 @@ import Router from 'vue-router'
 import UserActivate from '@/components/activate/UserActivate'
 import router from '../../router/index.js'
 import UserRegister from './UserRegister'
-import iView from 'iview'
-import 'iview/dist/styles/iview.css'
+import viewDesign from 'view-design'
+import 'view-design/dist/styles/iview.css'
 
 
-Vue.use(iView)
+Vue.use(viewDesign)
 Vue.use(Router)
 
 /* eslint-disable no-new */

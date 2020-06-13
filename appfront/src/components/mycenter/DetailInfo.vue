@@ -87,8 +87,10 @@
                     </FormItem>
                 </Col>
                 <Col span="11">
-                    <FormItem label="出生日期">
-                        <DatePicker type="date" v-model="formTop.birth" class="myinput"></DatePicker>
+                    <FormItem label="上传头像">
+                        <Upload action="../../../static/img">
+                            <Button icon="ios-cloud-upload-outline">上传头像</Button>
+                        </Upload>
                     </FormItem>
                 </Col>
             </Row>
@@ -101,14 +103,26 @@
                     </FormItem>
                 </Col>    
                 <Col span="11">
-                    <FormItem label="电子邮箱" prop="email">
-                        <Input v-model="formTop.email" class="myinput">
+                    <FormItem label="出生日期">
+                        <DatePicker type="date" v-model="formTop.birth" class="myinput"></DatePicker>
                     </FormItem>
                 </Col>
             </Row>
         </FormItem>
-        <FormItem label="毕业院校" prop="school">
-            <Input v-model="formTop.school" class="school">
+        <FormItem >
+            <Row>
+                <Col span="11">
+                    <FormItem label="电子邮箱" prop="email">
+                        <Input v-model="formTop.email" class="myinput">
+                    </FormItem>
+                </Col>
+                <Col span="11">
+                    <FormItem label="毕业院校" prop="school">
+                        <Input v-model="formTop.school" class="school">
+                    </FormItem>
+                </Col>    
+            </Row>
+            
         </FormItem>
         <FormItem>
             <Row>
@@ -319,6 +333,6 @@ export default {
     width:60%;
 }
 .school{
-    width:74%
+    width:60%
 }
 </style>

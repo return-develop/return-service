@@ -32,7 +32,8 @@ module.exports = {
     user_register: './src/components/register/user_register.js',
     user_activate: './src/components/activate/user_activate.js',
     home_page: './src/components/home/home_page.js',
-    my_center: './src/components/mycenter/my_center.js'
+    my_center: './src/components/mycenter/my_center.js',
+    company: './src/components/company/company_select.js'
   },
   output: {
     path: config.build.assetsRoot,

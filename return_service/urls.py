@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^user_activate/$', TemplateView.as_view(template_name = 'user_activate.html')),
     url(r'^mycenter/$', TemplateView.as_view(template_name = 'my_center.html')),
     url(r'^home/$', TemplateView.as_view(template_name = 'home_page.html')),
+    url(r'^company/$', TemplateView.as_view(template_name = 'company_select.html')),
     path('user_signup/', user.signup, name = 'signup'),
     path('user_logout/', user.logout, name = 'logout'),
     path('user_add_info', views.user_add_info),

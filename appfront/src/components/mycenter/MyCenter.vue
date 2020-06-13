@@ -64,7 +64,7 @@
     }
     .items ul li {
         color: #9b9b9b;
-        font-size: 1.5em;
+        font-size: 1.2em;
         padding-bottom: 70px;
     }
     .items ul li:first-child {

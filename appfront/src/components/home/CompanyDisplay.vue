@@ -1,6 +1,6 @@
 <template>
     <List item-layout="vertical" border>
-        <ListItem v-for="item in data" :key="item.title">
+        <ListItem v-for="item in data.slice(0, 5)" :key="item.title">
             <ListItemMeta :avatar="item.avatar" :title="item.title" />
             <!-- {{ item.content }} -->
             <div class="job-list">
@@ -13,7 +13,7 @@
                 <div class="workplace">工作地点：<br><span>深圳，北京，杭州</span></div>
             <div>
             <!-- <template slot="extra">
-                <img src="https://dev-file.iviewui.com/5wxHCQMUyrauMCGSVEYVxHR5JmvS7DpH/large" style="width: 280px">
+                <img src="https://dev-file.view-designui.com/5wxHCQMUyrauMCGSVEYVxHR5JmvS7DpH/large" style="width: 280px">
             </template> -->
         </ListItem>
     </List>
@@ -32,13 +32,85 @@
                     {
                         title: '字节跳动',
                         description: 'This is description, this is description, this is description.',
-                        avatar: 'https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar',
+                        avatar: '../../../static/img/curry.jpg',
                         content: 'This is the content, this is the content, this is the content, this is the content.'
                     },
                     {
                         title: '阿里巴巴',
                         description: 'This is description, this is description, this is description.',
-                        avatar: 'https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar',
+                        avatar: '../../../static/img/curry.jpg',
+                        content: 'This is the content, this is the content, this is the content, this is the content.'
+                    },
+                    {
+                        title: 'aaa',
+                        description: 'This is description, this is description, this is description.',
+                        avatar: '../../../static/img/curry.jpg',
+                        content: 'This is the content, this is the content, this is the content, this is the content.'
+                    },
+                    {
+                        title: 'bbb',
+                        description: 'This is description, this is description, this is description.',
+                        avatar: '../../../static/img/curry.jpg',
+                        content: 'This is the content, this is the content, this is the content, this is the content.'
+                    },
+                    {
+                        title: 'ccc',
+                        description: 'This is description, this is description, this is description.',
+                        avatar: '../../../static/img/curry.jpg',
+                        content: 'This is the content, this is the content, this is the content, this is the content.'
+                    },
+                    {
+                        title: 'ddd',
+                        description: 'This is description, this is description, this is description.',
+                        avatar: '../../../static/img/curry.jpg',
+                        content: 'This is the content, this is the content, this is the content, this is the content.'
+                    },
+                    {
+                        title: 'eee',
+                        description: 'This is description, this is description, this is description.',
+                        avatar: '../../../static/img/curry.jpg',
+                        content: 'This is the content, this is the content, this is the content, this is the content.'
+                    },
+                    {
+                        title: 'ffff',
+                        description: 'This is description, this is description, this is description.',
+                        avatar: '../../../static/img/curry.jpg',
+                        content: 'This is the content, this is the content, this is the content, this is the content.'
+                    },
+                    {
+                        title: 'hhhh',
+                        description: 'This is description, this is description, this is description.',
+                        avatar: '../../../static/img/curry.jpg',
+                        content: 'This is the content, this is the content, this is the content, this is the content.'
+                    },
+                    {
+                        title: '字节跳动',
+                        description: 'This is description, this is description, this is description.',
+                        avatar: '../../../static/img/curry.jpg',
+                        content: 'This is the content, this is the content, this is the content, this is the content.'
+                    },
+                    {
+                        title: '阿里巴巴',
+                        description: 'This is description, this is description, this is description.',
+                        avatar: '../../../static/img/curry.jpg',
+                        content: 'This is the content, this is the content, this is the content, this is the content.'
+                    },
+                    {
+                        title: '腾讯公司',
+                        description: 'This is description, this is description, this is description.',
+                        avatar: '../../../static/img/curry.jpg',
+                        content: 'This is the content, this is the content, this is the content, this is the content.'
+                    },
+                    {
+                        title: '字节跳动',
+                        description: 'This is description, this is description, this is description.',
+                        avatar: '../../../static/img/curry.jpg',
+                        content: 'This is the content, this is the content, this is the content, this is the content.'
+                    },
+                    {
+                        title: '阿里巴巴',
+                        description: 'This is description, this is description, this is description.',
+                        avatar: '../../../static/img/curry.jpg',
                         content: 'This is the content, this is the content, this is the content, this is the content.'
                     }
                 ],

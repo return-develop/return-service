@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import HomePage from './HomePage'
-import iView from 'iview'
-import 'iview/dist/styles/iview.css'
+import viewDesign from 'view-design'
+import 'view-design/dist/styles/iview.css'
 
-Vue.use(iView, {
+Vue.use(viewDesign, {
   i18n: function(path, options) {
     let value = i18n.t(path, options)
     if (value !== null && value !== undefined) {

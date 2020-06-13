@@ -77,7 +77,7 @@ export default {
     font-weight: 600;
 }
 .reset-pwd {
-    width:80%;
+    width:100%;
     border: 1px solid #FDF5E6;
     border-radius: 0.5rem;
 }
