@@ -23,6 +23,7 @@ class User(models.Model):
     prize = models.CharField(max_length = 256, default = '')
     skill = models.CharField(max_length = 256, default = '')
     url = models.CharField(max_length = 256, default = '')
+    isactive = models.BooleanField(default = False)
     
     def __unicode__(self):
         return self.id
