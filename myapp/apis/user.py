@@ -40,7 +40,6 @@ def signup_init(info):
         'sex': info['sex']
         }
 
-@ensure_csrf_cookie
 def signup(request):
     """
     用户注册\n
@@ -89,7 +88,6 @@ def login_helper(info):
         #账号错误
         return (-3, const_table.const.WRONG_ACCOUNT)
 
-@ensure_csrf_cookie
 def login(request):
     """
     用户登录\n
@@ -105,7 +103,6 @@ def login(request):
         request.session['email'] = info['email']
         return JsonResponse({'flag': const_table.const.SUCCESS, 'message': ''})
 
-@ensure_csrf_cookie
 def logout(request):
     """
     用户退出登录\n
