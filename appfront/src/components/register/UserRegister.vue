@@ -91,7 +91,7 @@
         return ''
       },
       checkEmail (email) {
-        var ePattern = /^([A-Za-z0-9])+@([A-Za-z0-9])+\.([A-Za-z]{2,4})$/g
+        var ePattern = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/g
         return ePattern.test(email)
       },
       reset () {
@@ -128,14 +128,13 @@
           'email': this.formItem.email,
           'password': this.formItem.password
         })
-        this.reset()
         if (res['flag'] === global_.CONSTGET.EMAIL_REGISTERED) {
           this.$Message.error('此邮箱已被注册!')
         } else if (res['flag'] === global_.CONSTGET.FAIL_SIGN_UP) {
           this.$Message.error('注册失败!')
         } else if (res['flag'] === global_.CONSTGET.SUCCESS) {
           this.$Message.success('注册成功!')
-          trans()
+          this.trans()
         }
       }
     }
@@ -193,7 +192,7 @@ a.login-style:hover {
 }
 .user-input {
   width: 28vw;
-  height: 2.2em;
+  height: 2.5em;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 0.5em;
@@ -210,7 +209,7 @@ a.login-style:hover {
   margin-left: auto;
   margin-right: auto;
   background-color: rgb(48, 36, 36);
-  font-size: 1.2em;
+  font-size: 1.1em;
 }
 .clause {
   width: 90%;

@@ -28,7 +28,8 @@ export default {
           active_code: ''
         },
         countdown: 180,
-        content: '点击获取'
+        content: '点击获取',
+        isClick: false
       }
     },
     created() {
@@ -43,6 +44,9 @@ export default {
       'countdown':{
         deep:true,
         handler: function(newV, oldV) {
+          if(newV == 0) {
+            this.isClick = false
+          }
           if(newV == 170){
             this.$Message.warning('111111')
           }
@@ -81,6 +85,7 @@ export default {
         this.formItem.active_code = ''
       },
       settime() {
+        this.isClick = true
         let timeInt = setInterval(() => {
           this.content = "重新发送(" + this.countdown + ")"
           this.countdown--;
@@ -136,9 +141,13 @@ export default {
             'foxmail.com': 'http://www.foxmail.com',
             'outlook.com': 'http://www.outlook.com'
         }
+        if (this.isClick == false) {
+          this.$Message.warning("请点击获取验证码！")
+          return
+        }
         var _email = email.split('@')[1];    //获取邮箱域
         if(hash.hasOwnProperty(_email)){
-            location.href=hash[_email];
+            window.open(hash[_email]);
         }else{
             this.$Message.warning("抱歉!未找到对应的邮箱登录地址，请自己登录邮箱查看邮件！");
         }
@@ -183,7 +192,7 @@ export default {
     .btn1, .btn2 {
         display: block;
         width: 28vw;
-        height: 2.2em;
+        height: 2.5em;
         margin-left: auto;
         margin-right: auto;
         font-size: 1em;
