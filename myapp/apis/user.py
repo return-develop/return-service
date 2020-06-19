@@ -40,7 +40,6 @@ def signup_init(info):
         'sex': info['sex']
         }
 
-@ensure_csrf_cookie
 def signup(request):
     """
     用户注册\n
@@ -51,14 +50,14 @@ def signup(request):
     email = info['email']
     #检查email是否已经存在
     if len(models.User.objects.filter(email = email)) > 0:
-        return JsonResponse({'flag': const_table.const.EMAIL_REGISTERED})
+       return JsonResponse({'flag': const_table.const.EMAIL_REGISTERED})
     info_dict = signup_init(info)
     try:
-        active_code = helper.get_active_code(email)
-        mySubject = messages.user_active_subject()
-        myMessage = messages.user_active_message(
-            'http:/localhost:8000%s' % ('/user_active/' + active_code))
-        helper.send_active_email(email, mySubject, myMessage)
+        #active_code = helper.get_active_code(email)
+        #mySubject = messages.user_active_subject()
+        #myMessage = messages.user_active_message(
+        #    'http:/localhost:8000%s' % ('/user_active/' + active_code))
+        #helper.send_active_email(email, mySubject, myMessage)
         models.User.objects.create(
             username = info_dict['username'], email = email, password = info_dict['password'],
             sex =  info_dict['sex'], salt = info_dict['salt'])
@@ -89,7 +88,6 @@ def login_helper(info):
         #账号错误
         return (-3, const_table.const.WRONG_ACCOUNT)
 
-@ensure_csrf_cookie
 def login(request):
     """
     用户登录\n
@@ -105,7 +103,6 @@ def login(request):
         request.session['email'] = info['email']
         return JsonResponse({'flag': const_table.const.SUCCESS, 'message': ''})
 
-@ensure_csrf_cookie
 def logout(request):
     """
     用户退出登录\n

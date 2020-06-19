@@ -5,7 +5,9 @@ from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.core import serializers
+from django.core.mail import send_mail, send_mass_mail, EmailMultiAlternatives
 import json, hashlib, time
+import random
 from django.conf import settings
 from .models import User
 from .models import Subject
@@ -13,28 +15,49 @@ from .models import Subrelation
 from .models import City
 from .models import Cityrelation
 
-@ensure_csrf_cookie
 def user_login(request):
     return render(request, 'user_login.html')
 
-@ensure_csrf_cookie
+def mailcheck(request):
+    """
+    邮箱验证接口
+    """
+    info = json.loads(request.body.decode('utf8'))
+    dic = {}
+    if info != "":
+        emailtemp = info["email"]
+        messagetemp = info["message"]
+        if messagetemp == "user activate":
+            if User.objects.filter(email__contains = emailtemp):
+                activate_code = ''.join(random.sample(['z','y','x','w','v','u','t','s','r','q','p','o','n','m','l','k','j','i','h','g','f','e','d','c','b','a'], 5))
+                res = send_mail('"归来"助力海外学习归国邮箱验证',str('您的验证码为'+str(activate_code)),'xmh_119@163.com',[emailtemp])
+                if res == 1:
+                    flag = 'success'
+                else:
+                    flag = 'fail'
+            dic['flag'] = flag
+            dic['activate_code'] = activate_code
+            dic = json.dumps(dic)
+            return HttpResponse(dic)
+
 def user_add_info(request):
     '''用户填写或修改个人信息'''
+    info = json.loads(request.body.decode('utf8'))
     dic = {}
-    if request.method == 'POST':
-        if request.POST:
-            usernametemp = request.POST.get('username')
-            sextemp = request.POST.get('sex')
-            birthdaytemp = request.POST.get('birthday')
-            phonetemp = request.POST.get('phone')
-            realnametemp = request.POST.get('realname')
-            schooltemp = request.POST.get('school')
-            majortemp = request.POST.get('major')
-            educationtemp = request.POST.get('education')
-            infotemp = request.POST.get('info')
-            hobbytemp = request.POST.get('hobby')
-            prizetemp = request.POST.get('prize')
-            skilltemp = request.POST.get('skill')
+    if info != "":
+        usernametemp = info['username']
+        sextemp = info['sex']
+        birthdaytemp = info['birthday']
+        phonetemp = info['phone']
+        realnametemp = info['realname']
+        schooltemp = info['school']
+        majortemp = info['major']
+        educationtemp = info['education']
+        infotemp = info['info']
+        hobbytemp = info['hobby']
+        prizetemp = info['prize']
+        skilltemp = info['skill']
+        try:
             alteruser = User.objects.get(username = usernametemp)
             alteruser.sex = sextemp
             alteruser.birthday = birthdaytemp
@@ -51,12 +74,15 @@ def user_add_info(request):
             dic['result_code'] = 200
             dic = json.dumps(dic)
             return HttpResponse(dic)
+        except:
+            dic['result_code'] = 403
+            dic = json.dumps(dic)
+            return HttpResponse(dic)
     else:
         dic['result_code'] = 400
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
-@ensure_csrf_cookie
 def user_view_info(request):
     '''用户查看个人信息'''
     dic = {}
@@ -76,29 +102,27 @@ def user_view_info(request):
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
-@ensure_csrf_cookie
 def subject_add(request):
     '''新增学科分类'''
+    info = json.loads(request.body.decode('utf8'))
     dic = {}
-    if request.method == 'POST':
-        if request.POST:
-            nametemp = request.POST.get('name')
-            if Subject.objects.filter(name = nametemp):
-                dic['result_code'] = 401
-                dic = json.dumps(dic)
-                return HttpResponse(dic)
-            else:
-                newsubject = Subject(name = nametemp)
-                newsubject.save()
-                dic['result_code'] = 200
-                dic = json.dumps(dic)
-                return HttpResponse(dic)
+    if info != "":
+        nametemp = info['name']
+        if Subject.objects.filter(name = nametemp):
+            dic['result_code'] = 401
+            dic = json.dumps(dic)
+            return HttpResponse(dic)
+        else:
+            newsubject = Subject(name = nametemp)
+            newsubject.save()
+            dic['result_code'] = 200
+            dic = json.dumps(dic)
+            return HttpResponse(dic)
     else:
         dic['result_code'] = 400
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
-@ensure_csrf_cookie
 def subject_delete(request):
     '''删除学科分类'''
     dic = {}
@@ -115,7 +139,6 @@ def subject_delete(request):
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
-@ensure_csrf_cookie
 def subject_update(request):
     '''修改学科分类'''
     dic = {}
@@ -134,7 +157,6 @@ def subject_update(request):
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
-@ensure_csrf_cookie
 def subject_view(request):
     '''查看学科分类'''
     dic = {}
@@ -151,7 +173,6 @@ def subject_view(request):
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
-@ensure_csrf_cookie
 def subrelation_add(request):
     '''新增学科关系'''
     dic = {}
@@ -176,7 +197,6 @@ def subrelation_add(request):
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
-@ensure_csrf_cookie
 def subrelation_delete(request):
     '''删除学科关系'''
     dic = {}
@@ -194,7 +214,6 @@ def subrelation_delete(request):
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
-@ensure_csrf_cookie
 def subrelation_update(request):
     '''修改学科关系'''
     dic = {}
@@ -216,7 +235,6 @@ def subrelation_update(request):
             dic = json.dumps(dic)
             return HttpResponse(dic)
 
-@ensure_csrf_cookie
 def subrelation_view(request):
     '''查看学科关系'''
     dic = {}
@@ -233,7 +251,6 @@ def subrelation_view(request):
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
-@ensure_csrf_cookie
 def city_add(request):
     '''新增城市分类'''
     dic = {}
@@ -255,7 +272,6 @@ def city_add(request):
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
-@ensure_csrf_cookie
 def city_delete(request):
     '''删除城市分类'''
     dic = {}
@@ -272,7 +288,6 @@ def city_delete(request):
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
-@ensure_csrf_cookie
 def city_update(request):
     '''修改城市分类'''
     dic = {}
@@ -291,7 +306,6 @@ def city_update(request):
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
-@ensure_csrf_cookie
 def city_view(request):
     '''查看城市分类'''
     dic = {}
@@ -308,7 +322,6 @@ def city_view(request):
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
-@ensure_csrf_cookie
 def cityrelation_add(request):
     '''新增城市关系'''
     dic = {}
@@ -333,7 +346,6 @@ def cityrelation_add(request):
             dic = json.dumps(dic)
             return HttpResponse(dic)
 
-@ensure_csrf_cookie
 def cityrelation_delete(request):
     '''删除城市关系'''
     dic = {}
@@ -351,7 +363,6 @@ def cityrelation_delete(request):
         dic =json.dumps(dic)
         return HttpResponse(dic)
 
-@ensure_csrf_cookie
 def cityrelation_update(request):
     '''修改城市关系'''
     dic = {}
@@ -373,7 +384,6 @@ def cityrelation_update(request):
             dic = json.dumps(dic)
             return HttpResponse(dic)
 
-@ensure_csrf_cookie
 def cityrelation_view(request):
     '''查看城市关系'''
     dic = {}
