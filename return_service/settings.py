@@ -82,7 +82,6 @@ DATABASES = {
         'NAME': 'mysql',
         'USER': 'root',
         'PASSWORD': 'return2020',
-
     }
 }
 
@@ -124,6 +123,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+EMAIL_HOST = 'smtp.163.com'
+# 设置端口号，为数字
+EMAIL_PORT = 25
+#设置发件人邮箱
+EMAIL_HOST_USER = 'xmh_119@163.com'
+# 设置发件人 授权码
+EMAIL_HOST_PASSWORD = 'NCDCTRZVDKMKCMNM'
+# 设置是否启用安全链接
+EMAIL_USER_TLS = True
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "appfront/dist/static"),

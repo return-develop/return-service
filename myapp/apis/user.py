@@ -50,14 +50,14 @@ def signup(request):
     email = info['email']
     #检查email是否已经存在
     if len(models.User.objects.filter(email = email)) > 0:
-        return JsonResponse({'flag': const_table.const.EMAIL_REGISTERED})
+       return JsonResponse({'flag': const_table.const.EMAIL_REGISTERED})
     info_dict = signup_init(info)
     try:
-        active_code = helper.get_active_code(email)
-        mySubject = messages.user_active_subject()
-        myMessage = messages.user_active_message(
-            'http:/localhost:8000%s' % ('/user_active/' + active_code))
-        helper.send_active_email(email, mySubject, myMessage)
+        #active_code = helper.get_active_code(email)
+        #mySubject = messages.user_active_subject()
+        #myMessage = messages.user_active_message(
+        #    'http:/localhost:8000%s' % ('/user_active/' + active_code))
+        #helper.send_active_email(email, mySubject, myMessage)
         models.User.objects.create(
             username = info_dict['username'], email = email, password = info_dict['password'],
             sex =  info_dict['sex'], salt = info_dict['salt'])

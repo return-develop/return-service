@@ -5,7 +5,9 @@ from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.core import serializers
+from django.core.mail import send_mail, send_mass_mail, EmailMultiAlternatives
 import json, hashlib, time
+import random
 from django.conf import settings
 from .models import User
 from .models import Subject
@@ -16,6 +18,27 @@ from .models import Cityrelation
 def user_login(request):
     return render(request, 'user_login.html')
 
+def mailcheck(request):
+    """
+    邮箱验证接口
+    """
+    info = json.loads(request.body.decode('utf8'))
+    dic = {}
+    if info != "":
+        emailtemp = info["email"]
+        messagetemp = info["message"]
+        if messagetemp == "user activate":
+            if User.objects.filter(email__contains = emailtemp):
+                activate_code = ''.join(random.sample(['z','y','x','w','v','u','t','s','r','q','p','o','n','m','l','k','j','i','h','g','f','e','d','c','b','a'], 5))
+                res = send_mail('"归来"助力海外学习归国邮箱验证',str('您的验证码为'+str(activate_code)),'xmh_119@163.com',[emailtemp])
+                if res == 1:
+                    flag = 'success'
+                else:
+                    flag = 'fail'
+            dic['flag'] = flag
+            dic['activate_code'] = activate_code
+            dic = json.dumps(dic)
+            return HttpResponse(dic)
 
 def user_add_info(request):
     '''用户填写或修改个人信息'''
