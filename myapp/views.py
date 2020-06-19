@@ -17,6 +17,7 @@ from .models import Cityrelation
 def user_login(request):
     return render(request, 'user_login.html')
 
+@ensure_csrf_cookie
 def user_add_info(request):
     '''用户填写或修改个人信息'''
     dic = {}
@@ -55,6 +56,7 @@ def user_add_info(request):
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
+@ensure_csrf_cookie
 def user_view_info(request):
     '''用户查看个人信息'''
     dic = {}
@@ -74,6 +76,7 @@ def user_view_info(request):
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
+@ensure_csrf_cookie
 def subject_add(request):
     '''新增学科分类'''
     dic = {}
@@ -95,6 +98,7 @@ def subject_add(request):
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
+@ensure_csrf_cookie
 def subject_delete(request):
     '''删除学科分类'''
     dic = {}
@@ -111,6 +115,7 @@ def subject_delete(request):
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
+@ensure_csrf_cookie
 def subject_update(request):
     '''修改学科分类'''
     dic = {}
@@ -129,6 +134,7 @@ def subject_update(request):
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
+@ensure_csrf_cookie
 def subject_view(request):
     '''查看学科分类'''
     dic = {}
@@ -145,6 +151,7 @@ def subject_view(request):
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
+@ensure_csrf_cookie
 def subrelation_add(request):
     '''新增学科关系'''
     dic = {}
@@ -169,6 +176,7 @@ def subrelation_add(request):
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
+@ensure_csrf_cookie
 def subrelation_delete(request):
     '''删除学科关系'''
     dic = {}
@@ -186,6 +194,7 @@ def subrelation_delete(request):
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
+@ensure_csrf_cookie
 def subrelation_update(request):
     '''修改学科关系'''
     dic = {}
@@ -207,6 +216,7 @@ def subrelation_update(request):
             dic = json.dumps(dic)
             return HttpResponse(dic)
 
+@ensure_csrf_cookie
 def subrelation_view(request):
     '''查看学科关系'''
     dic = {}
@@ -223,6 +233,7 @@ def subrelation_view(request):
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
+@ensure_csrf_cookie
 def city_add(request):
     '''新增城市分类'''
     dic = {}
@@ -244,6 +255,7 @@ def city_add(request):
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
+@ensure_csrf_cookie
 def city_delete(request):
     '''删除城市分类'''
     dic = {}
@@ -260,6 +272,7 @@ def city_delete(request):
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
+@ensure_csrf_cookie
 def city_update(request):
     '''修改城市分类'''
     dic = {}
@@ -278,6 +291,7 @@ def city_update(request):
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
+@ensure_csrf_cookie
 def city_view(request):
     '''查看城市分类'''
     dic = {}
@@ -294,6 +308,7 @@ def city_view(request):
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
+@ensure_csrf_cookie
 def cityrelation_add(request):
     '''新增城市关系'''
     dic = {}
@@ -318,6 +333,7 @@ def cityrelation_add(request):
             dic = json.dumps(dic)
             return HttpResponse(dic)
 
+@ensure_csrf_cookie
 def cityrelation_delete(request):
     '''删除城市关系'''
     dic = {}
@@ -335,6 +351,7 @@ def cityrelation_delete(request):
         dic =json.dumps(dic)
         return HttpResponse(dic)
 
+@ensure_csrf_cookie
 def cityrelation_update(request):
     '''修改城市关系'''
     dic = {}
@@ -356,6 +373,7 @@ def cityrelation_update(request):
             dic = json.dumps(dic)
             return HttpResponse(dic)
 
+@ensure_csrf_cookie
 def cityrelation_view(request):
     '''查看城市关系'''
     dic = {}
