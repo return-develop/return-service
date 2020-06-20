@@ -114,20 +114,30 @@
           'email': this.formItem.email,
           'password': this.formItem.password
         })
-        this.reset()
+        // this.reset()
         if (res['flag'] === global_.CONSTGET.SUCCESS) {
           this.$Message.success('登录成功!')
-          window.location.href = '/main_return/'
+          setTimeout(function () {
+              window.location.href = '/main_return/'
+            },2000)
         } else if (res['flag'] === global_.CONSTGET.ACCOUNT_LOGGED_IN) {
-          this.$Message.warning('账号已登录!')
-          window.location.href = '/main_return/'
-        } else if (res['flag'] === global_.CONSTGET.ACCOUNT_NOT_ACTIVETED) {
-          this.$Message.warning('账号未激活!')
-        } else if (res['flag'] === global_.CONSTGET.WRONG_PASSWORD) {
-          this.$Message.error('密码错误!')
+          this.$Message.info('账号已登录!')
+          setTimeout(function () {
+              window.location.href = '/main_return/'
+            },2000)
         } else if (res['flag'] === global_.CONSTGET.WRONG_ACCOUNT) {
           this.$Message.error('账号不存在!')
-        }
+        } else if (res['flag'] === global_.CONSTGET.ACCOUNT_NOT_ACTIVETED) {
+          this.$Message.warning('账号未激活,即将前往激活')
+          setTimeout(function () {
+              var email = this.formItem.email
+              var myurl="/user_activate"+"?"+"email=" + email
+              window.location.assign(encodeURI(myurl)) 
+            },2000)
+        } else if (res['flag'] === global_.CONSTGET.WRONG_PASSWORD) {
+          this.$Message.error('密码错误!')
+          this.formItem.email = ''
+        } 
       }
     }
   }

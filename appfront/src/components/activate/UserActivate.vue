@@ -29,29 +29,28 @@ export default {
           email: '',
           active_code: ''
         },
-        activate_code: '',
-        countdown: 180,
+        activate_code: '',  //服务器返回的激活码
+        countdown: 180, //发送倒计时
         content: '点击获取',
-        isShow: true
+        isShow: true  //显示
       }
     },
+    //解析url
     created() {
       var url=location.href 
       var tmp1 = url.split("?")[1]
       var tmp2 = tmp1.split("&")[0]
       var tmp3 = tmp2.split("=")[1]
       this.formItem.email = tmp3
-      console.log(this.formItem.email)
+//       console.log(this.formItem.email)
     },
     watch:{
       'countdown':{
         deep:true,
         handler: function(newV, oldV) {
           if(newV == 0) {
-            this.isClick = false
           }
           if(newV == 170){
-            this.$Message.warning('111111')
           }
         }
       }
@@ -88,7 +87,6 @@ export default {
         this.formItem.active_code = ''
       },
       async settime() {
-        console.log("123123123")
         this.isShow = false
         let res = await this.fetchBase('/api/user/activate/', {
           'email': this.formItem.email,
@@ -97,12 +95,9 @@ export default {
         console.log(res)
         if (res['flag'] === global_.CONSTGET.SUCCESS) {
           this.activate_code = res['activate_code']
-          console.log(this.activate_code)
         } else if (res['flag'] === global_.CONSTGET.EMAIL_ACTIVATED) {
           this.$Message.error("您的邮箱已激活")
           this.isShow = true
-          // this.$Message.success("即将为您跳转到登录界面")
-          // window.location.href = '/user_login/'
           return
         } else if (res['flag'] === global_.CONSTGET.FAIL) {
           this.$Message.error("获取激活码失败，可能是您的邮箱不存在！")
@@ -130,14 +125,16 @@ export default {
           return
         }
         if (this.formItem.active_code === this.activate_code) {
+          console.log("激活码正确")
           let res = await this.fetchBase('/api/user/check_activate/', {
           'email': this.formItem.email,
-          'isactivate': true
+          'isactivate': "true"
           })
           if (res['flag'] === global_.CONSTGET.SUCCESS) {
-            this.$Message.success("激活成功！")
-            this.$Message.success("即将为您跳转到登录界面")
-            window.location.href = '/user_login/'
+            this.$Message.success("激活成功！即将为您跳转到登录界面")
+            setTimeout(function () {
+              window.location.href = '/user_login/'
+            },2000)
           } else if (res['flag'] === global_.CONSTGET.FAIL) {
             this.$Message.error("服务器错误")
             return

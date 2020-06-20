@@ -81,7 +81,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'mysql',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'return2020',
     }
 }
 

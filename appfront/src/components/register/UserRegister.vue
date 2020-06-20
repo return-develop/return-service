@@ -4,7 +4,6 @@
     <div class="container">
         <div class="ask-login">
           <p>已有账号？<a href="/user_login" class="login-style">请登录</a></p>
-          <a @click="trans">ttest</a>
         </div>
         <div class="user-register">
             <h3 class="title">注册 归来</h3>
