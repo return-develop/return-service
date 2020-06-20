@@ -1,6 +1,7 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+from django.core.mail import send_mail, send_mass_mail, EmailMultiAlternatives
 import json, hashlib, time, random, string
 from .. import models, tests, const_table
 from . import helper, messages

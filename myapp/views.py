@@ -6,7 +6,7 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.core import serializers
 from django.core.mail import send_mail, send_mass_mail, EmailMultiAlternatives
-import json, hashlib, time
+import json, hashlib, time, string
 import random
 from django.conf import settings
 from .models import User
@@ -17,6 +17,35 @@ from .models import Cityrelation
 
 def user_login(request):
     return render(request, 'user_login.html')
+
+def getback_password(request):
+    """
+    找回密码
+    """
+    password = ''
+    info = json.loads(request.body.decode('utf8'))
+    dic = {}
+    emailtemp = info['email']
+    user = User.objects.get(email = emailtemp)
+    passwordtemp = ''.join(random.sample(['z','y','x','w','v','u','t','s','r','q','p','o','n','m','l','k','j','i','h','g','f','e','d','c','b','a'], 8))
+    res = send_mail('"归来"助力海外学习归国找回密码',str('您的初始密码重置为'+str(passwordtemp)+'，请尽快修改您的密码'),'xmh_119@163.com',[emailtemp])
+    if res == 1:
+        flag = 'success'
+    else:
+        flag = 'fail'
+    md5 = hashlib.md5()
+    md5.update(str(int(time.time())).encode('utf8'))
+    salt = ''.join(random.sample(string.ascii_letters + string.digits, 8))
+    passwordtemp += salt
+    md5 = hashlib.md5()
+    md5.update(passwordtemp.encode('utf8'))
+    passwordtemp = md5.hexdigest()
+    user.password = passwordtemp
+    user.salt = salt
+    user.save()
+    dic['flag'] = flag
+    dic = json.dumps(dic)
+    return HttpResponse(dic)
 
 def mailcheck(request):
     """

@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'^home/$', TemplateView.as_view(template_name = 'home_page.html')),
     url(r'^company/$', TemplateView.as_view(template_name = 'company_select.html')),
     path('mailcheck', views.mailcheck),
+    path('getback_password', views.getback_password),
     path('user_signup/', user.signup, name = 'signup'),
     path('user_logout/', user.logout, name = 'logout'),
     path('user_add_info', views.user_add_info),
