@@ -40,6 +40,34 @@ def mailcheck(request):
             dic = json.dumps(dic)
             return HttpResponse(dic)
 
+def user_activate(request):
+    """
+    用户邮箱验证成功
+    """
+    info = json.loads(request.body.decode('utf8'))
+    dic = {}
+    if info != "":
+        emailtemp = info["email"]
+        isactivatetemp = info["isactivate"]
+        if isactivatetemp == "true":
+            if User.objects.filter(email__contains = emailtemp):
+                if User.objects.filter(email__contains = emailtemp, isactive__contains = False):
+                    alteruser = User.objects.get(email = emailtemp)
+                    alteruser.isactivate = True
+                    alteruser.save()
+                    dic['flag'] = 'success'
+                    dic = json.dumps(dic)
+                    return HttpResponse(dic)
+                else:
+                    dic['flag'] = 'email has been actived'
+                    dic = json.dumps(dic)
+                    return HttpResponse(dic)
+            else:
+                dic['flag'] = 'fail'
+                dic = json.dumps(dic)
+                return HttpResponse(dic)
+
+
 def user_add_info(request):
     '''用户填写或修改个人信息'''
     info = json.loads(request.body.decode('utf8'))
