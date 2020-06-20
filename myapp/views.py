@@ -28,17 +28,26 @@ def mailcheck(request):
         emailtemp = info["email"]
         messagetemp = info["message"]
         if messagetemp == "user activate":
-            if User.objects.filter(email__contains = emailtemp, isactive__contains = False):
-                activate_code = ''.join(random.sample(['z','y','x','w','v','u','t','s','r','q','p','o','n','m','l','k','j','i','h','g','f','e','d','c','b','a'], 5))
-                res = send_mail('"归来"助力海外学习归国邮箱验证',str('您的验证码为'+str(activate_code)),'xmh_119@163.com',[emailtemp])
-                if res == 1:
-                    flag = 'success'
+            if User.objects.filter(email__contains = emailtemp):
+                if User.objects.filter(email__contains = emailtemp, isactive__contains = False):
+                    activate_code = ''.join(random.sample(['z','y','x','w','v','u','t','s','r','q','p','o','n','m','l','k','j','i','h','g','f','e','d','c','b','a'], 5))
+                    res = send_mail('"归来"助力海外学习归国邮箱验证',str('您的验证码为'+str(activate_code)),'xmh_119@163.com',[emailtemp])
+                    if res == 1:
+                        flag = 'success'
+                    else:
+                        flag = 'fail'
                 else:
-                    flag = 'fail'
-            dic['flag'] = flag
-            dic['activate_code'] = activate_code
-            dic = json.dumps(dic)
-            return HttpResponse(dic)
+                    flag = 'email has been actived'
+                    activate_code = ''
+                dic['flag'] = flag
+                dic['activate_code'] = activate_code
+                dic = json.dumps(dic)
+                return HttpResponse(dic)
+            else:
+                dic['flag'] = 'email wrong'
+                dic['activate_code'] = ''
+                dic = json.dumps(dic)
+                return HttpResponse(dic)
 
 def user_activate(request):
     """
