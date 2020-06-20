@@ -5,7 +5,8 @@
           <h3 class="title">还差一步，激活账号</h3>
           <div class="item">
             输入邮箱中获得的激活码
-            <span value="点击获取激活码" @click="settime">{{content}}</span>
+            <span value="点击获取激活码" @click="settime" v-if="isShow">{{content}}</span>
+            <span value="重新发送时间" v-if="!isShow">重新发送({{countdown}})</span>
           </div>
           <div class="user-input">
             <Input v-model="formItem.active_code" placeholder="激活码" type="text" class="customer-input">
@@ -27,9 +28,10 @@ export default {
           email: '',
           active_code: ''
         },
+        activate_code: '',
         countdown: 180,
         content: '点击获取',
-        isClick: false
+        isShow: true
       }
     },
     created() {
@@ -85,13 +87,25 @@ export default {
         this.formItem.active_code = ''
       },
       settime() {
-        this.isClick = true
+        console.log("123123123")
+        this.isShow = false
+        let res = await this.fetchBase('/api/user/activate/', {
+          'email': this.formItem.email,
+          'message': 'user activate'
+        })
+        if(res['flag'] === global_.CONSTGET.SUCCESS) {
+          this.activate_code = res['activate_code']
+          console.log(this.activate_code)
+        } else if (res['flag'] === global_.CONSTGET.FAIL) {
+          this.$Message.error("获取激活码失败，可能是您的邮箱不存在！")
+          this.isShow = true
+          return
+        }
         let timeInt = setInterval(() => {
-          this.content = "重新发送(" + this.countdown + ")"
           this.countdown--;
           if (this.countdown <= 0) {
-            this.content = "点击获取"
             this.countdown = 180
+            this.isShow = true
             window.clearInterval(timeInt)
           }
         }, 1000)
@@ -102,18 +116,28 @@ export default {
           this.$Message.warning("不能为空！")
           return
         }
-        let res = await this.fetchBase('/api/user/activate/', {
+        if (this.countdown === 180) {
+          this.$Message.warning("验证码无效，请重新获取！")
+          this.activate_code = ''
+          return
+        }
+        if (this.formItem.active_code === this.activate_code) {
+          let res = await this.fetchBase('/api/user/check_activate/', {
           'email': this.formItem.email,
-          'active_code': this.formItem.active_code
-        })
-        this.reset()
-        if (res['flag'] === global_.CONSTGET.INVALID) {
-          this.$Message.error(global_CONSTSHOW.INVALID)
-        } else if (res['flag'] === global_.CONSTGET.EXPIRED) {
-          this.$Message.error(global_CONSTSHOW.EXPIRED)
-        } else if (res['flag'] === global_.CONSTGET.SUCCESS) {
-          this.$Message.success('激活成功!')
-          window.location.href = '/user_login/'
+          'isActivate': true
+          })
+          if (res['flag'] === global_.CONSTGET.SUCCESS) {
+            this.$Message.success("激活成功！")
+            this.$Message.success("即将为您跳转到登录界面")
+            window.location.href = '/user_login/'
+          } else if (res['flag'] === global_.CONSTGET.FAIL) {
+            this.$Message.error("服务器错误")
+            return
+          }
+        } else {
+          this.$Message.error("验证码错误，重新输入")
+          this.reset()
+          return
         }
       },
       goToEmailLogin (email) {
@@ -122,6 +146,7 @@ export default {
             'gmail.com': 'http://mail.google.com',
             'sina.com': 'http://mail.sina.com.cn',
             '163.com': 'http://mail.163.com',
+            '162.com': 'http://mail.162.com',
             '126.com': 'http://mail.126.com',
             'yeah.net': 'http://www.yeah.net/',
             'sohu.com': 'http://mail.sohu.com/',
@@ -141,7 +166,7 @@ export default {
             'foxmail.com': 'http://www.foxmail.com',
             'outlook.com': 'http://www.outlook.com'
         }
-        if (this.isClick == false) {
+        if (this.isShow == true) {
           this.$Message.warning("请点击获取验证码！")
           return
         }
@@ -149,7 +174,7 @@ export default {
         if(hash.hasOwnProperty(_email)){
             window.open(hash[_email]);
         }else{
-            this.$Message.warning("抱歉!未找到对应的邮箱登录地址，请自己登录邮箱查看邮件！");
+            this.$Message.warning("未匹配到邮箱地址，请自行登录查看！");
         }
       }
     }

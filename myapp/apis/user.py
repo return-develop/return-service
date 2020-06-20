@@ -35,9 +35,9 @@ def signup_init(info):
         'rs': 1,
         'salt': salt,
         'email': info['email'],
-        'username': info['username'],
+        
         'password': password,
-        'sex': info['sex']
+        
         }
 
 def signup(request):
@@ -59,8 +59,8 @@ def signup(request):
         #    'http:/localhost:8000%s' % ('/user_active/' + active_code))
         #helper.send_active_email(email, mySubject, myMessage)
         models.User.objects.create(
-            username = info_dict['username'], email = email, password = info_dict['password'],
-            sex =  info_dict['sex'], salt = info_dict['salt'])
+            email = email, password = info_dict['password'],
+            salt = info_dict['salt'])
         return JsonResponse({'flag': const_table.const.SUCCESS, 'message': ''})
     except Exception:
         return JsonResponse({'flag': const_table.const.FAIL_SIGN_UP})
