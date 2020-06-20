@@ -29,7 +29,8 @@ def mailcheck(request):
         messagetemp = info["message"]
         if messagetemp == "user activate":
             if User.objects.filter(email__contains = emailtemp):
-                if User.objects.filter(email__contains = emailtemp, isactive__contains = False):
+                usertemp = User.objects.get(email = emailtemp)
+                if usertemp.isactive == False:
                     activate_code = ''.join(random.sample(['z','y','x','w','v','u','t','s','r','q','p','o','n','m','l','k','j','i','h','g','f','e','d','c','b','a'], 5))
                     res = send_mail('"归来"助力海外学习归国邮箱验证',str('您的验证码为'+str(activate_code)),'xmh_119@163.com',[emailtemp])
                     if res == 1:
@@ -60,9 +61,10 @@ def user_activate(request):
         isactivatetemp = info["isactivate"]
         if isactivatetemp == "true":
             if User.objects.filter(email__contains = emailtemp):
-                if User.objects.filter(email__contains = emailtemp, isactive__contains = False):
+                usertemp = User.objects.get(email = emailtemp)
+                if usertemp.isactive == False:
                     alteruser = User.objects.get(email = emailtemp)
-                    alteruser.isactivate = True
+                    alteruser.isactive = True
                     alteruser.save()
                     dic['flag'] = 'success'
                     dic = json.dumps(dic)
