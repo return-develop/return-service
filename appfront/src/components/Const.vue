@@ -1,7 +1,7 @@
 <script>
 const CONSTGET = {
   SUCCESS: 'success',
-  FAILED: 'failed',
+  FAIL: 'fail',
   WRONG_PASSWORD: 'wrong password',
   FAIL_MODIFY: 'fail to midify',
   EMAIL_REGISTERED: 'this email has been registered',
