@@ -7,6 +7,7 @@ const CONSTGET = {
   EMAIL_REGISTERED: 'this email has been registered',
   FAIL_SIGN_UP: 'fail to sign up',
   ACCOUNT_NOT_ACTIVETED: 'account not be activated',
+  EMAIL_ACTIVATED: 'email has been actived',
   ACCOUNT_LOGGED_OFF: 'account has been logged off',
   ACCOUNT_LOGGED_IN: 'account has been logged in',
   WRONG_ACCOUNT: 'wrong account',

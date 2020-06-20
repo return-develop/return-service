@@ -1,7 +1,8 @@
 <template>
     <ul class="topmenu">
         <li class="menu-item"><a href="/home" class="active">首页</a></li>
-        <li class="menu-item"><a href="/consult">就业咨询</a></li>
+        <li class="menu-item"><a href="/">就业咨询</a></li>
+        <li class="menu-item"><a href="/">定制企业清单</a></li>
         <span class="else-item">
             <li class="login-register menu-item">
                     <button class="dropbtn"><img src="../../static/img/profile.jpg"></button>
@@ -39,7 +40,7 @@
         created() {
             var url = window.location.href.split('/').filter(function (s) { return s && s.trim()})[2]
             console.log(url)
-            if (url == 'company' || url == 'home'){
+            if (url == 'company' || url == 'home' || url == 'user_register' || url == 'user_activate' || url == 'user_login'){
                 this.isShow = false;
                 this.dropShow = false;
             }

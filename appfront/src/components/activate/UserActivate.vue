@@ -20,6 +20,7 @@
 </template>
 <script>
 import navigation from '../navigation'
+import global_ from '../Const'
 export default {
     components:{navigation},
     data () {
@@ -86,16 +87,23 @@ export default {
       reset () {
         this.formItem.active_code = ''
       },
-      settime() {
+      async settime() {
         console.log("123123123")
         this.isShow = false
         let res = await this.fetchBase('/api/user/activate/', {
           'email': this.formItem.email,
           'message': 'user activate'
         })
-        if(res['flag'] === global_.CONSTGET.SUCCESS) {
+        console.log(res)
+        if (res['flag'] === global_.CONSTGET.SUCCESS) {
           this.activate_code = res['activate_code']
           console.log(this.activate_code)
+        } else if (res['flag'] === global_.CONSTGET.EMAIL_ACTIVATED) {
+          this.$Message.error("您的邮箱已激活")
+          this.isShow = true
+          // this.$Message.success("即将为您跳转到登录界面")
+          // window.location.href = '/user_login/'
+          return
         } else if (res['flag'] === global_.CONSTGET.FAIL) {
           this.$Message.error("获取激活码失败，可能是您的邮箱不存在！")
           this.isShow = true
@@ -124,7 +132,7 @@ export default {
         if (this.formItem.active_code === this.activate_code) {
           let res = await this.fetchBase('/api/user/check_activate/', {
           'email': this.formItem.email,
-          'isActivate': true
+          'isactivate': true
           })
           if (res['flag'] === global_.CONSTGET.SUCCESS) {
             this.$Message.success("激活成功！")
