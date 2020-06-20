@@ -33,7 +33,6 @@ urlpatterns = [
     url(r'^home/$', TemplateView.as_view(template_name = 'home_page.html')),
     url(r'^company/$', TemplateView.as_view(template_name = 'company_select.html')),
     path('mailcheck', views.mailcheck),
-    path('user_activate', views.user_activate),
     path('user_signup/', user.signup, name = 'signup'),
     path('user_logout/', user.logout, name = 'logout'),
     path('user_add_info', views.user_add_info),
@@ -59,5 +58,6 @@ urlpatterns = [
     url(r'^api/findback_password/$', user.logout),  #todo   
     url(r'^api/user/login/$', user.login, name = 'login'),
     url(r'^api/user/signup/$', user.signup, name = 'signup'),
-    # url(r'^api/user/activate/$', user.activate, name = 'activate'),
+    url(r'^api/user/activate/$', views.mailcheck, name = 'activate'),
+    url(r'^api/user/check_activate/$', views.user_activate, name = 'check_activate'),
 ]
