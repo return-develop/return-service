@@ -115,28 +115,27 @@
           'password': this.formItem.password
         })
         // this.reset()
-        if (res['flag'] === global_.CONSTGET.SUCCESS) {
+        if (res['flag'] === global_.CONSTGET.SUCCESS) { //success
           this.$Message.success('登录成功!')
           setTimeout(function () {
-              window.location.href = '/main_return/'
+              window.location.href = '/home/'
             },2000)
-        } else if (res['flag'] === global_.CONSTGET.ACCOUNT_LOGGED_IN) {
-          this.$Message.info('账号已登录!')
-          setTimeout(function () {
-              window.location.href = '/main_return/'
-            },2000)
-        } else if (res['flag'] === global_.CONSTGET.WRONG_ACCOUNT) {
+        // } else if (res['flag'] === global_.CONSTGET.ACCOUNT_LOGGED_IN) { //account has been logged in
+        //   this.$Message.info('账号已登录!')
+        //   setTimeout(function () {
+        //       window.location.href = '/main_return/'
+        //     },2000)
+        } else if (res['flag'] === global_.CONSTGET.WRONG_ACCOUNT) { //wrong account
           this.$Message.error('账号不存在!')
-        } else if (res['flag'] === global_.CONSTGET.ACCOUNT_NOT_ACTIVETED) {
+        } else if (res['flag'] === global_.CONSTGET.ACCOUNT_NOT_ACTIVETED) { //account not be activated
           this.$Message.warning('账号未激活,即将前往激活')
+          var that = this
           setTimeout(function () {
-              var email = this.formItem.email
-              var myurl="/user_activate"+"?"+"email=" + email
-              window.location.assign(encodeURI(myurl)) 
-            },2000)
-        } else if (res['flag'] === global_.CONSTGET.WRONG_PASSWORD) {
+            window.location.assign(encodeURI("/user_activate"+"?"+"email=" + that.formItem.email)) 
+          },2000)
+        } else if (res['flag'] === global_.CONSTGET.WRONG_PASSWORD) { //wrong password
           this.$Message.error('密码错误!')
-          this.formItem.email = ''
+          this.formItem.password = ''
         } 
       }
     }
