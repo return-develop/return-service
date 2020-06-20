@@ -95,13 +95,23 @@ def login(request):
     **返回值**: 包含成功/失败信息的JsonResponse\n
     """
     info = json.loads(request.body.decode('utf8'))
+    dic = {}
     code = login_helper(info)
     if code[0] < 1:
-        return JsonResponse({'flag': code[1]})
+        dic['flag'] = code[1]
     else:
-        request.session['username'] = code[1]
-        request.session['email'] = info['email']
-        return JsonResponse({'flag': const_table.const.SUCCESS, 'message': ''})
+        usernametemp = code[1]
+        emailtemp = info['email']
+        if models.User.objects.filter(email__contains = emailtemp):
+            usertemp = models.User.objects.get(email = emailtemp)
+            if usertemp.isactive == False:
+                dic['flag'] = const_table.const.ACCOUNT_NOT_ACTIVETED
+            else:
+                dic['flag'] = const_table.const.SUCCESS
+        else:
+            dic['flag'] = const_table.const.WRONG_ACCOUNT
+    dic = json.dumps(dic)
+    return HttpResponse(dic)
 
 def logout(request):
     """
