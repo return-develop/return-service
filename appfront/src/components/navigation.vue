@@ -38,20 +38,23 @@
             }
         },
         created() {
-            // var url = window.location.href.split('/').filter(function (s) { return s && s.trim()})[2]
-            // console.log(url)
-            // if (url == 'company' || url == 'home' || url == 'user_register' || url == 'user_activate' || url == 'user_login'){
-            //     this.isShow = false;
-            //     this.dropShow = false;
-            // }
-            // else {
-            //     this.isShow = true;
-            //     this.dropShow = true;
-            // }
-            if (this.getCookieValue("login") == "yes") {
+            var url = window.location.href.split('/').filter(function (s) { return s && s.trim()})[2]
+            if (this.getCookieValue("login") == "yes" && url == 'mycenter'){
+                this.isShow = true;
+                this.dropShow = false;
+                if (this.getCookieValue("username").trim().length == 0){
+                    this.username = this.getCookieValue("email")
+                } else {
+                    this.username = this.getCookieValue("username")
+                }
+            } else if (this.getCookieValue("login") == "yes") {
                 this.isShow = true;
                 this.dropShow = true;
-                this.username = this.getCookieValue("email")
+                if (this.getCookieValue("username").trim().length == 0){
+                    this.username = this.getCookieValue("email")
+                } else {
+                    this.username = this.getCookieValue("username")
+                }
             }
         },
         methods: {
@@ -150,7 +153,7 @@ ul span li img{
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color:#755c5c;
+    background-color:white;
     width: 150px;
     border-radius: 5px;
     z-index: 999;

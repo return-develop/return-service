@@ -164,6 +164,7 @@
 <script>
 import global_ from '../Const'
 export default {
+    props: ["sendForm"],
     data () {
         return{
             formTemp:{
@@ -271,12 +272,18 @@ export default {
                 ]
         }
     },
+    created() {
+        console.log(this.sendForm)
+        for (var item in this.sendForm) {
+            this.formTop[item] = this.sendForm[item]
+        }
+    },
     methods: {
         submit() { 
             this.$refs['formTop'].validate((valid) => {
                 if (valid) {
                     this.$Message.success('保存成功');
-                    console.log('2222')
+                    console.log(this.formTop)
                     // let res = this.fetchBase('/api/user/signup/', {
                     // content: this.formTop//有可能出错
                     // })

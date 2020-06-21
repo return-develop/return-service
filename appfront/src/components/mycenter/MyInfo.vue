@@ -1,36 +1,38 @@
 <template>
     <div id="show-info">
-        <div class="introduce" v-if="isShow">
+        <div class="introduce" v-if="isShow"> 
             <div class="uname">
-                <span>{{formTop.username}}·</span><span>{{formTop.sex}}</span>
-                <a @click="isShow = false">编辑</a>
+                <span>{{formTop.username}}</span><span style="padding:0;font-size:1.6em;">|</span>
+                <span>{{formTop.sex}}</span>
+                <a @click="isShow = false">编·辑</a>
             </div>
             <div class="info">
-                <li class="sp">{{formTop.school}}·{{formTop.major}}</li>
-                <li class="gg">{{formTop.goal}}·{{formTop.graduate_time}}</li>
-                <li class="dc">期望工作地点：{{formTop.city}}</li>
+                <li class="sp"><div>学校：<span>{{formTop.school}}</span></div><div>专业：<span>{{formTop.major}}</span></div></li>
+                <li class="gg"><div>工作目标：<span>{{formTop.goal}}</span></div><div>毕业时间：<span>{{formTop.graduate_time}}</span></div></li>
+                <li class="dc"><div>期望工作地点：<span>{{formTop.city}}</span></div></li>
             </div>
         </div>
-        <div v-if="!isShow" class="detail-info"><DetailInfo></DetailInfo></div>
+        <div v-if="!isShow" class="detail-info"><DetailInfo :sendForm="sendForm"></DetailInfo></div>
     </div>
 </template>
 <script>
 import DetailInfo from './DetailInfo'
+import global_ from '../Const' 
 export default {
     components:{DetailInfo},
     data () {
         return {
             isShow: true,
             formTop: {
-                username: '用户（未填）',
+                username: '用户名',
                 realname:'',
-                sex: '性别（未填）',
-                school: '学校（未填）',
-                major: '专业（未填）',
-                education: '学历（未填）',
-                goal: '目标（未填）',
-                graduate_time: '毕业时间（未填）',
-                city: '城市（未填）',
+                sex: '待填写',
+                school: '待填写',
+                major: '待填写',
+                education: '待填写',
+                goal: '待填写',
+                graduate_time: '待填写',
+                city: '待填写',
                 birth:'',
                 phone: '',
                 email: '',
@@ -38,26 +40,45 @@ export default {
                 prize: '',
                 skill: ''
             },
-           
+            sendForm: {
+                username: '',
+                realname:'',
+                sex: '',
+                school: '',
+                major: '',
+                education: '',
+                goal: '',
+                graduate_time: '',
+                city: '',
+                birth:'',
+                phone: '',
+                email: '',
+                hobby: '',
+                prize: '',
+                skill: ''
+            }
         }
     },
-    created() {
+    async created() {
         if (this.getCookieValue("login") === "yes") {
             var email = this.getCookieValue("email")
-            let res = await this.fetchBase('/api/user/get_user_info/', {
+            let res = await this.fetchBase('/user_view_info', {
             'email': email,
             })
             if (res['flag'] === global_.CONSTGET.SUCCESS) {
-                this.$Message.success("获取成功")
-                console.log(res['list'])
+                console.log(res)
+                for (var item in res) {
+                    this.sendForm[item] = res[item]
+                    if (res[item].trim().length > 0) {
+                        this.formTop[item] = res[item]
+                    }
+                }
             } else if (res['flag'] === global_.CONSTGET.FAIL) {
-                this.$Message.error("服务器错误")
-                return
+                this.$Message.error("服务器错误，即将为您跳转到首页")
+                setTimeout(function () {
+                    window.location.href = '/'
+                },2000)
             }
-            } else {
-            this.$Message.error("验证码错误，重新输入")
-            this.reset()
-            return
         }
     },
     methods: {
@@ -79,6 +100,33 @@ export default {
             }else{ //搜索失败，返回空字符串
             return "";
             }
+        },
+        fetchBase (url, body) {
+        return fetch(url, {
+          method: 'post',
+          credentials: 'same-origin',
+          headers: {
+            'X-CSRFToken': this.getCookie('csrftoken'),
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        })
+        .then((res) => res.json())
+        },
+        getCookie (cName) {
+            if (document.cookie.length > 0) {
+            let cStart = document.cookie.indexOf(cName + '=')
+            if (cStart !== -1) {
+                cStart = cStart + cName.length + 1
+                let cEnd = document.cookie.indexOf(';', cStart)
+                if (cEnd === -1) {
+                cEnd = document.cookie.length
+                }
+                return unescape(document.cookie.substring(cStart, cEnd))
+            }
+            }
+            return ''
         },
         // edit () {
         //     this.ishow = !this.ishow;
@@ -117,8 +165,8 @@ export default {
     line-height: 70px;
     padding-right: 20px;
 }
-.uname span:first-child {
-    padding-left: 12px;
+.uname span {
+    padding: 0 12px;
 }
 .uname a {
     float: right;
@@ -133,11 +181,20 @@ export default {
 .sp {
     padding-bottom: .5em;
     padding-top: .5em;
+    display: flex;
 }
 .gg{
     padding-bottom: 1em;
+    display: flex;
 }
 .dc{
     padding-bottom: .5em;
+}
+.sp div, .gg div {
+    width: 35%;
+}
+.sp div span, .gg div span, .dc div span {
+    font-size: 1em;
+    font-weight: 500;
 }
 </style>

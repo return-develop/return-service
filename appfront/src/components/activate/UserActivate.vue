@@ -89,7 +89,7 @@ export default {
       async settime() {
         this.isShow = false
         let res = await this.fetchBase('/api/user/activate/', {
-          'email': this.formItem.email,
+          'email': this.formItem.email.trim(),
           'message': 'user activate'
         })
         console.log(res)
