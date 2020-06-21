@@ -69,8 +69,8 @@
                     </FormItem>
                 </Col>    
                 <Col span="11">
-                    <FormItem label="性别" prop="gender">
-                        <RadioGroup v-model="formTop.gender">
+                    <FormItem label="性别" prop="sex">
+                        <RadioGroup v-model="formTop.sex">
                             <Radio label="男">男</Radio>
                             <Radio label="女">女</Radio>
                         </RadioGroup>
@@ -82,8 +82,8 @@
         <FormItem>
             <Row>
                 <Col span="11">
-                    <FormItem label="姓名" prop="name">
-                        <Input v-model="formTop.name" class="myinput">
+                    <FormItem label="姓名" prop="realname">
+                        <Input v-model="formTop.realname" class="myinput">
                     </FormItem>
                 </Col>
                 <Col span="11">
@@ -127,8 +127,8 @@
         <FormItem>
             <Row>
                 <Col span="11">
-                    <FormItem label="专业" prop="professional">
-                        <Select v-model="formTop.professional" :placeholder="professional" class="myinput">
+                    <FormItem label="专业" prop="major">
+                        <Select v-model="formTop.major" :placeholder="major" class="myinput">
                             <Option v-for="item in job" :value="item.name">{{item.name}}</Option>
                         </Select>
                     </FormItem>
@@ -147,13 +147,13 @@
             </Row>
         </FormItem>
         <FormItem label="兴趣爱好" >
-            <Input v-model="formTop.interest" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder class="school">
+            <Input v-model="formTop.hobby" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder class="school">
         </FormItem>
         <FormItem label="获奖情况" >
-            <Input v-model="formTop.award" type="textarea" :autosize="{minRows: 2,maxRows: 5}" class="school">
+            <Input v-model="formTop.prize" type="textarea" :autosize="{minRows: 2,maxRows: 5}" class="school">
         </FormItem>
         <FormItem label="职业技能证书" >
-            <Input v-model="formTop.certificate" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder class="school">
+            <Input v-model="formTop.skill" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder class="school">
         </FormItem>
         <FormItem>
             <Button type="primary" @click.native="submit">保存</Button>
@@ -167,47 +167,47 @@ export default {
     data () {
         return{
             formTemp:{
-                username: '黄德军',
-                name:'黄德军',
-                gender: '',
-                school: '南开大学',
-                professional: '软件工程',
-                education: '硕士',
-                goal: '寻找实习',
-                graduate_time: '2022年6月毕业',
-                city: '北京',
-                birth:'1995-10-21',
-                phone: "18722492209",
-                email: "2120190512@mail.nankai.edu.cn",
-                interest: '唱歌，跳舞，打球',
-                award: '2019年软件学院软件之星称号',
-                certificate: "cet4"
+                username: '用户（未填）',
+                realname:'',
+                sex: '性别（未填）',
+                school: '学校（未填）',
+                major: '专业（未填）',
+                education: '学历（未填）',
+                goal: '目标（未填）',
+                graduate_time: '毕业时间（未填）',
+                city: '城市（未填）',
+                birth:'',
+                phone: '',
+                email: '',
+                hobby: '',
+                prize: '',
+                skill: ''
             },
             formTop: {
-                username: '黄德军',
-                name:'黄德军',
-                gender: '',
-                school: '南开大学',
-                professional: '软件工程',
-                education: '硕士',
-                goal: '寻找实习',
-                graduate_time: '2022年6月毕业',
-                city: '北京',
-                birth:'1995-10-21',
-                phone: "18722492209",
-                email: "2120190512@mail.nankai.edu.cn",
-                interest: '唱歌，跳舞，打球',
-                award: '2019年软件学院软件之星称号',
-                certificate: "cet4"
+                username: '用户（未填）',
+                realname:'',
+                sex: '性别（未填）',
+                school: '学校（未填）',
+                major: '专业（未填）',
+                education: '学历（未填）',
+                goal: '目标（未填）',
+                graduate_time: '毕业时间（未填）',
+                city: '城市（未填）',
+                birth:'',
+                phone: '',
+                email: '',
+                hobby: '',
+                prize: '',
+                skill: ''
             },
             ruleValidate: {
                     username: [
                         { required: true, message: '不能为空', trigger: 'blur' }
                     ],
-                    gender: [
+                    sex: [
                         { required: true, message: '不能为空', trigger: 'change' }
                     ],
-                    name: [
+                    realname: [
                         { required: true, message: '不能为空', trigger: 'blur' }
                     ],
                     email: [
@@ -217,7 +217,7 @@ export default {
                     phone: [
                         { required: true, message: '不能为空', trigger: 'blur' }
                     ],
-                    professional: [
+                    major: [
                         { required: true, message: '不能为空', trigger: 'change' }
                     ],
                     education: [

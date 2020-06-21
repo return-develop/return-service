@@ -1,15 +1,15 @@
 <template>
     <ul class="topmenu">
-        <li class="menu-item"><a href="/home" class="active">首页</a></li>
-        <li class="menu-item"><a href="/">就业咨询</a></li>
-        <li class="menu-item"><a href="/">定制企业清单</a></li>
+        <li class="menu-item menu-item1"><a href="/home" class="active">首页</a></li>
+        <li class="menu-item menu-item2"><a href="/">就业咨询</a></li>
+        <li class="menu-item menu-item3"><a href="/">定制企业清单</a></li>
         <span class="else-item">
             <li class="login-register menu-item">
                     <button class="dropbtn"><img src="../../static/img/profile.jpg"></button>
                     <a href="/user_login" class="login-nav" v-if="!isShow">登录</a>
                     <Divider type="vertical" v-if="!isShow"/>
                     <a href="/user_register" class="register-nav" v-if="!isShow">注册</a>
-                    <span style="padding: 0 10px;font-size: 12px;color: white;line-height: 36px" v-if="isShow">你好，{{username}}</span>
+                    <span style="padding: 0 10px;font-size:12px;color:white;line-height:36px;max-length:100px;overflow:hidden;" v-if="isShow">你好，{{username}}</span>
                     <div class="dropdown-content" v-if="dropShow">
                         <a href="/mycenter" >个人中心</a>
                         <a href="/" >退出登录</a>
@@ -34,19 +34,24 @@
             return{
                 isShow: true,
                 dropShow: true,
-                username: '黄布莱恩特'
+                username: '用户'
             }
         },
         created() {
-            var url = window.location.href.split('/').filter(function (s) { return s && s.trim()})[2]
-            console.log(url)
-            if (url == 'company' || url == 'home' || url == 'user_register' || url == 'user_activate' || url == 'user_login'){
-                this.isShow = false;
-                this.dropShow = false;
-            }
-            else {
+            // var url = window.location.href.split('/').filter(function (s) { return s && s.trim()})[2]
+            // console.log(url)
+            // if (url == 'company' || url == 'home' || url == 'user_register' || url == 'user_activate' || url == 'user_login'){
+            //     this.isShow = false;
+            //     this.dropShow = false;
+            // }
+            // else {
+            //     this.isShow = true;
+            //     this.dropShow = true;
+            // }
+            if (this.getCookieValue("login") == "yes") {
                 this.isShow = true;
                 this.dropShow = true;
+                this.username = this.getCookieValue("email")
             }
         },
         methods: {
@@ -55,7 +60,26 @@
             },
             toLogout() {
                 window.location.href = "/"
-            }
+            },
+            getCookieValue(name){ /**获取cookie的值，根据cookie的键获取值**/
+                //用处理字符串的方式查找到key对应value
+                var name = escape(name);
+                //读cookie属性，这将返回文档的所有cookie
+                var allcookies = document.cookie;
+                //查找名为name的cookie的开始位置
+                name += "=";
+                var pos = allcookies.indexOf(name);
+                //如果找到了具有该名字的cookie，那么提取并使用它的值
+                if (pos != -1){                       //如果pos值为-1则说明搜索"version="失败
+                var start = pos + name.length;         //cookie值开始的位置
+                var end = allcookies.indexOf(";",start);    //从cookie值开始的位置起搜索第一个";"的位置,即cookie值结尾的位置
+                if (end == -1) end = allcookies.length;    //如果end值为-1说明cookie列表里只有一个cookie
+                var value = allcookies.substring(start,end); //提取cookie的值
+                return (value);              //对它解码
+                }else{ //搜索失败，返回空字符串
+                return "";
+                }
+            },
         }
     }
 </script>
@@ -126,7 +150,7 @@ ul span li img{
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: white;
+    background-color:#755c5c;
     width: 150px;
     border-radius: 5px;
     z-index: 999;

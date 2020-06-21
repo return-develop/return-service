@@ -6,7 +6,7 @@
                 <a @click="isShow = false">编辑</a>
             </div>
             <div class="info">
-                <li class="sp">{{formTop.school}}·{{formTop.professional}}</li>
+                <li class="sp">{{formTop.school}}·{{formTop.major}}</li>
                 <li class="gg">{{formTop.goal}}·{{formTop.graduate_time}}</li>
                 <li class="dc">期望工作地点：{{formTop.city}}</li>
             </div>
@@ -22,26 +22,48 @@ export default {
         return {
             isShow: true,
             formTop: {
-                username: '黄德军',
-                name:'黄德军',
-                gender: '',
-                school: '南开大学',
-                professional: '软件工程',
-                education: '硕士',
-                goal: '寻找实习',
-                graduate_time: '2022年6月毕业',
-                city: '北京',
-                birth:'1995-10-21',
-                phone: "18722492209",
-                email: "2120190512@mail.nankai.edu.cn",
-                interest: '唱歌，跳舞，打球',
-                award: '2019年软件学院软件之星称号',
-                certificate: "cet4"
+                username: '用户（未填）',
+                realname:'',
+                sex: '性别（未填）',
+                school: '学校（未填）',
+                major: '专业（未填）',
+                education: '学历（未填）',
+                goal: '目标（未填）',
+                graduate_time: '毕业时间（未填）',
+                city: '城市（未填）',
+                birth:'',
+                phone: '',
+                email: '',
+                hobby: '',
+                prize: '',
+                skill: ''
             },
            
         }
     },
+    created() {
+        this.formTop.email = this.getCookieValue("email")
+    },
     methods: {
+        getCookieValue(name){ /**获取cookie的值，根据cookie的键获取值**/
+            //用处理字符串的方式查找到key对应value
+            var name = escape(name);
+            //读cookie属性，这将返回文档的所有cookie
+            var allcookies = document.cookie;
+            //查找名为name的cookie的开始位置
+            name += "=";
+            var pos = allcookies.indexOf(name);
+            //如果找到了具有该名字的cookie，那么提取并使用它的值
+            if (pos != -1){                       //如果pos值为-1则说明搜索"version="失败
+            var start = pos + name.length;         //cookie值开始的位置
+            var end = allcookies.indexOf(";",start);    //从cookie值开始的位置起搜索第一个";"的位置,即cookie值结尾的位置
+            if (end == -1) end = allcookies.length;    //如果end值为-1说明cookie列表里只有一个cookie
+            var value = allcookies.substring(start,end); //提取cookie的值
+            return (value);              //对它解码
+            }else{ //搜索失败，返回空字符串
+            return "";
+            }
+        },
         // edit () {
         //     this.ishow = !this.ishow;
         // }
