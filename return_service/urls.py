@@ -61,4 +61,5 @@ urlpatterns = [
     url(r'^api/user/signup/$', user.signup, name = 'signup'),
     url(r'^api/user/activate/$', views.mailcheck, name = 'activate'),
     url(r'^api/user/check_activate/$', views.user_activate, name = 'check_activate'),
+    url(r'^api/user/findback_password/$', views.getback_password, name = 'findback_password'),
 ]
