@@ -110,7 +110,7 @@ def user_activate(request):
 
 def user_update_info(request):
     '''用户填写或修改个人信息'''
-    info = json.loads(request.body.decode('utf8'))
+    info = json.loads(request.body.decode('utf8'))['content']
     dic = {}
     if info != "":
         usernametemp = info['username']
