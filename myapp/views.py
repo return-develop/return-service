@@ -108,46 +108,66 @@ def user_activate(request):
                 return HttpResponse(dic)
 
 
-def user_add_info(request):
+def user_update_info(request):
     '''用户填写或修改个人信息'''
     info = json.loads(request.body.decode('utf8'))
     dic = {}
     if info != "":
         usernametemp = info['username']
-        sextemp = info['sex']
-        birthdaytemp = info['birthday']
-        phonetemp = info['phone']
         realnametemp = info['realname']
+        sextemp = info['sex']
         schooltemp = info['school']
         majortemp = info['major']
         educationtemp = info['education']
-        infotemp = info['info']
+        goaltemp = info['goal']
+        graduate_timetemp = info['graduate_time']
+        citytemp = info['city']
+        birthdaytemp = info['birth']
+        phonetemp = info['phone']
+        emailtemp = info['email']
         hobbytemp = info['hobby']
         prizetemp = info['prize']
         skilltemp = info['skill']
         try:
-            alteruser = User.objects.get(username = usernametemp)
-            alteruser.sex = sextemp
-            alteruser.birthday = birthdaytemp
-            alteruser.phone = phonetemp
-            alteruser.realname = realnametemp
-            alteruser.school = schooltemp
-            alteruser.major = majortemp
-            alteruser.education = educationtemp
-            alteruser.info = infotemp
-            alteruser.hobby = hobbytemp
-            alteruser.prize = prizetemp
-            alteruser.skill = skilltemp
+            alteruser = User.objects.get(email = emailtemp)
+            if usernametemp != '':
+                alteruser.username = usernametemp
+            if realnametemp != '':
+                alteruser.realname = realnametemp
+            if sextemp != '':
+                alteruser.sex = sextemp
+            if schooltemp != '':
+                alteruser.school = schooltemp
+            if majortemp != '':
+                alteruser.major = majortemp
+            if educationtemp != '':
+                alteruser.education = educationtemp
+            if goaltemp != '':
+                alteruser.goal = goaltemp
+            if graduate_timetemp != '':
+                alteruser.graduate_time = graduate_timetemp
+            if citytemp != '':
+                alteruser.city = citytemp
+            if birthdaytemp != '':
+                alteruser.birthday = birthdaytemp
+            if phonetemp != '':
+                alteruser.phone = phonetemp
+            if hobbytemp != '':
+                alteruser.hobby = hobbytemp
+            if prizetemp != '':
+                alteruser.prize = prizetemp
+            if skilltemp != '':
+                alteruser.skill = skilltemp
             alteruser.save()
-            dic['result_code'] = 200
+            dic['flag'] = 'success'
             dic = json.dumps(dic)
             return HttpResponse(dic)
         except:
-            dic['result_code'] = 403
+            dic['flag'] = 'fail'
             dic = json.dumps(dic)
             return HttpResponse(dic)
     else:
-        dic['result_code'] = 400
+        dic['flag'] = 'fail'
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
@@ -168,6 +188,9 @@ def user_view_info(request):
         dic['school'] = usertemp.school
         dic['major'] = usertemp.major
         dic['education'] = usertemp.education
+        dic['goal'] = usertemp.goal
+        dic['graduate_time'] = usertemp.graduate_time
+        dic['city'] = usertemp.city
         dic['info'] = usertemp.info
         dic['hobby'] = usertemp.hobby
         dic['prize'] = usertemp.prize

@@ -36,7 +36,7 @@ urlpatterns = [
     path('getback_password', views.getback_password),
     path('user_signup/', user.signup, name = 'signup'),
     path('user_logout/', user.logout, name = 'logout'),
-    path('user_add_info', views.user_add_info),
+    path('user_update_info', views.user_update_info),
     path('user_view_info', views.user_view_info),
     path('subject_add', views.subject_add),
     path('subject_delete', views.subject_delete),
