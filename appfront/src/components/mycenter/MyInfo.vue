@@ -42,7 +42,23 @@ export default {
         }
     },
     created() {
-        this.formTop.email = this.getCookieValue("email")
+        if (this.getCookieValue("login") === "yes") {
+            var email = this.getCookieValue("email")
+            let res = await this.fetchBase('/api/user/get_user_info/', {
+            'email': email,
+            })
+            if (res['flag'] === global_.CONSTGET.SUCCESS) {
+                this.$Message.success("获取成功")
+                console.log(res['list'])
+            } else if (res['flag'] === global_.CONSTGET.FAIL) {
+                this.$Message.error("服务器错误")
+                return
+            }
+            } else {
+            this.$Message.error("验证码错误，重新输入")
+            this.reset()
+            return
+        }
     },
     methods: {
         getCookieValue(name){ /**获取cookie的值，根据cookie的键获取值**/
