@@ -113,7 +113,7 @@
             <Row>
                 <Col span="11">
                     <FormItem label="电子邮箱" prop="email">
-                        <Input v-model="formTop.email" class="myinput">
+                        <Input v-model="formTop.email" readonly="readonly" class="myinput">
                     </FormItem>
                 </Col>
                 <Col span="11">
@@ -167,6 +167,7 @@ export default {
     props: ["sendForm"],
     data () {
         return{
+            infoValid: false,
             formTemp:{
                 username: '用户（未填）',
                 realname:'',
@@ -279,55 +280,58 @@ export default {
         }
     },
     methods: {
-        submit() { 
+        async submit() { 
             this.$refs['formTop'].validate((valid) => {
                 if (valid) {
-                    this.$Message.success('保存成功');
-                    console.log(this.formTop)
-                    // let res = this.fetchBase('/api/user/signup/', {
-                    // content: this.formTop//有可能出错
-                    // })
-                    // this.reset()
-                    // if (res['flag'] === global_.CONSTGET.SUCCESS) {
-                    // this.$Message.success('保存成功');
-                    // } else if (res['flag'] === global_.CONSTGET.FAILED) {
-                    // this.$Message.error('保存失败')
-                    // }
+                    this.infoValid = true;
                 } else {
                     // this.$Message.error('失败');
                 }
             })
+            if (this.infoValid == true) {
+                let res = await this.fetchBase('/user_update_info', {
+                    content: this.formTop
+                })
+                if (res['flag'] === global_.CONSTGET.SUCCESS) {
+                    this.$Message.success('保存成功');
+                    console.log("保存成功了");
+                    this.infoValid = false
+                } else if (res['flag'] === global_.CONSTGET.FAIL) {
+                    this.$Message.error('保存失败')
+                    this.infoValid = false
+                }
+            }
         },
         cancel() {
             this.formTop = JSON.parse(JSON.stringify(this.formTemp))
         },
-        // fetchBase (url, body) {
-        //     return fetch(url, {
-        //     method: 'post',
-        //     credentials: 'same-origin',
-        //     headers: {
-        //         'X-CSRFToken': this.getCookie('csrftoken'),
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify(body)
-        //     })
-        //     .then((res) => res.json())
-        // },
-        // getCookie (cName) {
-        //     if (document.cookie.length > 0) {
-        //         let cStart = document.cookie.indexOf(cName + '=')
-        //         if (cStart !== -1) {
-        //             cStart = cStart + cName.length + 1
-        //             let cEnd = document.cookie.indexOf(';', cStart)
-        //             if (cEnd === -1) {
-        //             cEnd = document.cookie.length
-        //             }
-        //             return unescape(document.cookie.substring(cStart, cEnd))
-        //         }
-        //     }
-        //     return ''
-        // },
+        fetchBase (url, body) {
+            return fetch(url, {
+            method: 'post',
+            credentials: 'same-origin',
+            headers: {
+                'X-CSRFToken': this.getCookie('csrftoken'),
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+            })
+            .then((res) => res.json())
+        },
+        getCookie (cName) {
+            if (document.cookie.length > 0) {
+                let cStart = document.cookie.indexOf(cName + '=')
+                if (cStart !== -1) {
+                    cStart = cStart + cName.length + 1
+                    let cEnd = document.cookie.indexOf(';', cStart)
+                    if (cEnd === -1) {
+                    cEnd = document.cookie.length
+                    }
+                    return unescape(document.cookie.substring(cStart, cEnd))
+                }
+            }
+            return ''
+        },
     }
 }
 </script>
