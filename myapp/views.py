@@ -153,20 +153,30 @@ def user_add_info(request):
 
 def user_view_info(request):
     '''用户查看个人信息'''
+    info = json.loads(request.body.decode('utf8'))
     dic = {}
-    if request.method == 'POST':
-        if request.POST:
-            usernametemp = request.POST.get('username')
-            if User.objects.filter(username__contains = usernametemp):
-                usertemp = User.objects.filter(username__contains = usernametemp)
-                dic['list'] = json.loads(
-                    serializers.serialize("json", usertemp)
-                )
-                dic['result_code'] = 200
-                dic = json.dumps(dic)
-                return HttpResponse(dic)
+    emailtemp = info['email']
+    if User.objects.filter(email__contains = emailtemp):
+        dic['flag'] = 'success'
+        usertemp = User.objects.get(email = emailtemp)
+        dic['username'] = usertemp.username
+        dic['sex'] = usertemp.sex
+        dic['birthday'] = usertemp.birthday
+        dic['phone'] = usertemp.phone
+        dic['email'] = usertemp.email
+        dic['realname'] = usertemp.realname
+        dic['school'] = usertemp.school
+        dic['major'] = usertemp.major
+        dic['education'] = usertemp.education
+        dic['info'] = usertemp.info
+        dic['hobby'] = usertemp.hobby
+        dic['prize'] = usertemp.prize
+        dic['skill'] = usertemp.skill
+        dic['url'] = usertemp.url
+        dic = json.dumps(dic)
+        return HttpResponse(dic)
     else:
-        dic['result_code'] = 400
+        dic['flag'] = 'fail'
         dic = json.dumps(dic)
         return HttpResponse(dic)
 
