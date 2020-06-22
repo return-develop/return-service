@@ -104,7 +104,8 @@
                 </Col>    
                 <Col span="11">
                     <FormItem label="出生日期">
-                        <DatePicker type="date" v-model="formTop.birth" class="myinput"></DatePicker>
+                        <DatePicker type="date" v-model="formTop.birthday" class="myinput"></DatePicker>
+                        
                     </FormItem>
                 </Col>
             </Row>
@@ -178,7 +179,7 @@ export default {
                 goal: '目标（未填）',
                 graduate_time: '毕业时间（未填）',
                 city: '城市（未填）',
-                birth:'',
+                birthday:'',
                 phone: '',
                 email: '',
                 hobby: '',
@@ -195,7 +196,7 @@ export default {
                 goal: '目标（未填）',
                 graduate_time: '毕业时间（未填）',
                 city: '城市（未填）',
-                birth:'',
+                birthday:'',
                 phone: '',
                 email: '',
                 hobby: '',
@@ -277,21 +278,27 @@ export default {
         console.log(this.sendForm)
         for (var item in this.sendForm) {
             this.formTop[item] = this.sendForm[item]
+            this.formTemp[item] = this.sendForm[item]
         }
     },
     methods: {
         async submit() { 
+            var d = new Date(this.formTop.birthday);
+            this.formTop.birthday = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate()
+            console.log("写改后" + this.formTop.birthday)
+            console.log(this.formTop)
             this.$refs['formTop'].validate((valid) => {
                 if (valid) {
                     this.infoValid = true;
                 } else {
-                    // this.$Message.error('失败');
+                    this.$Message.error('失败');
                 }
             })
             if (this.infoValid == true) {
                 let res = await this.fetchBase('/user_update_info', {
                     content: this.formTop
                 })
+                console.log(res)
                 if (res['flag'] === global_.CONSTGET.SUCCESS) {
                     this.$Message.success('保存成功');
                     console.log("保存成功了");

@@ -2,12 +2,13 @@
     <div id="show-info">
         <div class="introduce" v-if="isShow"> 
             <div class="uname">
-                <span>{{formTop.username}}</span><span style="padding:0;font-size:1.6em;">|</span>
+                <span>{{formTop.username}}</span>
+                <span style="padding:0;font-size:1.6em;">|</span>
                 <span>{{formTop.sex}}</span>
-                <a @click="isShow = false">编·辑</a>
+                <div class="complete"><Progress :percent="percent" :stroke-width="18" text-inside /></div>
             </div>
             <div class="info">
-                <li class="sp"><div>学校：<span>{{formTop.school}}</span></div><div>专业：<span>{{formTop.major}}</span></div></li>
+                <li class="sp"><div>学校：<span>{{formTop.school}}</span></div><div>专业：<span>{{formTop.major}}</span></div><div><Icon type="ios-create-outline" /><a @click="isShow = false">编辑</a></div></li>
                 <li class="gg"><div>工作目标：<span>{{formTop.goal}}</span></div><div>毕业时间：<span>{{formTop.graduate_time}}</span></div></li>
                 <li class="dc"><div>期望工作地点：<span>{{formTop.city}}</span></div></li>
             </div>
@@ -23,6 +24,8 @@ export default {
     data () {
         return {
             isShow: true,
+            percent: 0,
+            sum: 0,
             formTop: {
                 username: '用户名',
                 realname:'',
@@ -33,7 +36,7 @@ export default {
                 goal: '待填写',
                 graduate_time: '待填写',
                 city: '待填写',
-                birth:'',
+                birthday:'',
                 phone: '',
                 email: '',
                 hobby: '',
@@ -50,7 +53,7 @@ export default {
                 goal: '',
                 graduate_time: '',
                 city: '',
-                birth:'',
+                birthday:'',
                 phone: '',
                 email: '',
                 hobby: '',
@@ -65,14 +68,19 @@ export default {
             let res = await this.fetchBase('/user_view_info', {
             'email': email,
             })
+            console.log(res)
             if (res['flag'] === global_.CONSTGET.SUCCESS) {
-                console.log(res)
+                delete res['flag']
                 for (var item in res) {
                     this.sendForm[item] = res[item]
                     if (res[item].trim().length > 0) {
                         this.formTop[item] = res[item]
+                        this.sum += 1
                     }
                 }
+                this.percent = parseInt(this.sum) * 100 / parseInt(Object.keys(this.formTop).length)
+                console.log("sum:" + this.sum + "percent:" + this.percent)
+                this.sum = 0
             } else if (res['flag'] === global_.CONSTGET.FAIL) {
                 this.$Message.error("服务器错误，即将为您跳转到首页")
                 setTimeout(function () {
@@ -171,6 +179,14 @@ export default {
 .uname a {
     float: right;
 }
+.complete {
+    float: right;
+    width: 64%;
+    padding-right: 12px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
 .info {
     margin-left: 12px;
     list-style-type:none;
@@ -196,5 +212,11 @@ export default {
 .sp div span, .gg div span, .dc div span {
     font-size: 1em;
     font-weight: 500;
+    overflow: hidden;
+}
+.sp div:last-child {
+    width: 30%!important;
+    text-align: right;
+    padding-right: 12px;
 }
 </style>

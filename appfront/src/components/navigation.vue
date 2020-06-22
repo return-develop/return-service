@@ -1,10 +1,10 @@
 <template>
     <ul class="topmenu">
-        <li class="menu-item menu-item1"><a href="/home" class="active">首页</a></li>
-        <li class="menu-item menu-item2"><a href="/">就业咨询</a></li>
-        <li class="menu-item menu-item3"><a href="/">定制企业清单</a></li>
+        <li class="menu-item1"><a href="/home" class="active">首页</a></li>
+        <li class="menu-item2"><a href="/">就业咨询</a></li>
+        <li class="menu-item3"><a href="/">定制企业清单</a></li>
         <span class="else-item">
-            <li class="login-register menu-item">
+            <li class="login-register menu-item1">
                     <button class="dropbtn"><img src="../../static/img/profile.jpg"></button>
                     <a href="/user_login" class="login-nav" v-if="!isShow">登录</a>
                     <Divider type="vertical" v-if="!isShow"/>
@@ -21,7 +21,7 @@
                             <DropdownItem><span style="color:#272727;line-height: 36px" @click="toLogout">退出登录</span></DropdownItem>
                         </DropdownMenu>
                     </Dropdown> -->
-            <li class="book menu-item">
+            <li class="book menu-item1">
                 <img src="../../static/img/wechat-1.jpg">
                 <a href="/book" class="book-nav">订阅公众号</a>
             </li>
@@ -42,11 +42,16 @@
             if (this.getCookieValue("login") == "yes" && url == 'mycenter'){
                 this.isShow = true;
                 this.dropShow = false;
-                if (this.getCookieValue("username").trim().length == 0){
+                if (this.getCookieValue("username") == ""){
                     this.username = this.getCookieValue("email")
                 } else {
                     this.username = this.getCookieValue("username")
                 }
+            } else if (this.getCookieValue("login") == "" && url == 'mycenter') {
+                this.$Message.warning("未登录，即将跳转到登录界面")
+                setTimeout(function () {
+                    window.location.href = '/user_login/'
+                    },2000)
             } else if (this.getCookieValue("login") == "yes") {
                 this.isShow = true;
                 this.dropShow = true;
@@ -100,11 +105,11 @@
     height: 36px;
     background-color:#272727;
 }
-.menu-item {
+.menu-item1, .menu-item2, .menu-item3 {
     float: left;
     line-height: 36px;
 }
-.menu-item a {
+.menu-item1 a, .menu-item2 a, .menu-item3 a {
     display: inline-block;
     color: white;
     font-size: 14px;
@@ -112,7 +117,7 @@
     padding: 0 16px;
     text-decoration: none;
 }
-.menu-item a:hover {
+.menu-item1 a:hover, .menu-item2 a:hover, .menu-item3 a:hover{
     background-color: rgb(63, 60, 60);
     color: white;
     font-weight: bold;
