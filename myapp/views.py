@@ -122,7 +122,7 @@ def user_update_info(request):
         goaltemp = info['goal']
         graduate_timetemp = info['graduate_time']
         citytemp = info['city']
-        birthdaytemp = info['birth']
+        birthdaytemp = info['birthday']
         phonetemp = info['phone']
         emailtemp = info['email']
         hobbytemp = info['hobby']
