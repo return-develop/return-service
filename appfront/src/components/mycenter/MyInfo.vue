@@ -13,7 +13,7 @@
                 <li class="dc"><div>期望工作地点：<span>{{formTop.city}}</span></div></li>
             </div>
         </div>
-        <div v-if="!isShow" class="detail-info"><DetailInfo :sendForm="sendForm"></DetailInfo></div>
+        <div v-if="!isShow" class="detail-info"><DetailInfo :sendForm="sendForm" @getChangeName="getChangeName"></DetailInfo></div>
     </div>
 </template>
 <script>
@@ -26,6 +26,7 @@ export default {
             isShow: true,
             percent: 0,
             sum: 0,
+            changeName: '',
             formTop: {
                 username: '用户名',
                 realname:'',
@@ -78,7 +79,7 @@ export default {
                         this.sum += 1
                     }
                 }
-                this.percent = parseInt(this.sum) * 100 / parseInt(Object.keys(this.formTop).length)
+                this.percent = parseInt(parseInt(this.sum) * 100 / parseInt(Object.keys(this.formTop).length))
                 console.log("sum:" + this.sum + "percent:" + this.percent)
                 this.sum = 0
             } else if (res['flag'] === global_.CONSTGET.FAIL) {
@@ -136,6 +137,10 @@ export default {
             }
             return ''
         },
+        getChangeName(res) {
+            // console.log("父组件" + res)
+            this.$emit('getChangeName0', res)
+        }
         // edit () {
         //     this.ishow = !this.ishow;
         // }

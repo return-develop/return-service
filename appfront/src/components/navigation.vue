@@ -9,7 +9,7 @@
                     <a href="/user_login" class="login-nav" v-if="!isShow">登录</a>
                     <Divider type="vertical" v-if="!isShow"/>
                     <a href="/user_register" class="register-nav" v-if="!isShow">注册</a>
-                    <span style="padding: 0 10px;font-size:12px;color:white;line-height:36px;max-length:100px;overflow:hidden;" v-if="isShow">你好，{{username}}</span>
+                    <span style="padding: 0 10px;color:white;line-height:36px;max-length:100px;overflow:hidden;" v-if="isShow">你好，<span style="color:#5cadff;font-weight:600;">{{username}}</span></span>
                     <div class="dropdown-content" v-if="dropShow">
                         <a href="/mycenter" >个人中心</a>
                         <a href="/" >退出登录</a>
@@ -30,6 +30,12 @@
 </template>
 <script>
     export default {
+        props: {
+            changeName: {
+                type:String,
+                default: ''
+            }
+        },
         data () {
             return{
                 isShow: true,
@@ -39,6 +45,7 @@
         },
         created() {
             var url = window.location.href.split('/').filter(function (s) { return s && s.trim()})[2]
+            console.log(document.cookie)
             if (this.getCookieValue("login") == "yes" && url == 'mycenter'){
                 this.isShow = true;
                 this.dropShow = false;
@@ -62,6 +69,14 @@
                 }
             }
         },
+        watch: {
+            changeName: function(n) {
+                // console.log("收到了" + n)
+                if (n != this.username) {
+                    this.username = n
+                }
+            }
+        },
         methods: {
             toCenter() {
                 window.location.href = "/mycenter"
@@ -79,13 +94,13 @@
                 var pos = allcookies.indexOf(name);
                 //如果找到了具有该名字的cookie，那么提取并使用它的值
                 if (pos != -1){                       //如果pos值为-1则说明搜索"version="失败
-                var start = pos + name.length;         //cookie值开始的位置
-                var end = allcookies.indexOf(";",start);    //从cookie值开始的位置起搜索第一个";"的位置,即cookie值结尾的位置
-                if (end == -1) end = allcookies.length;    //如果end值为-1说明cookie列表里只有一个cookie
-                var value = allcookies.substring(start,end); //提取cookie的值
-                return (value);              //对它解码
+                    var start = pos + name.length;         //cookie值开始的位置
+                    var end = allcookies.indexOf(";",start);    //从cookie值开始的位置起搜索第一个";"的位置,即cookie值结尾的位置
+                    if (end == -1) end = allcookies.length;    //如果end值为-1说明cookie列表里只有一个cookie
+                    var value = allcookies.substring(start,end); //提取cookie的值
+                    return unescape(value);              //对它解码
                 }else{ //搜索失败，返回空字符串
-                return "";
+                    return "";
                 }
             },
         }
@@ -130,7 +145,7 @@
 
 .else-item{
     float: right;
-    font-size: 0.9em;
+    font-size: 14px;
 }
 
 .topmenu li:last-child{

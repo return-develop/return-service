@@ -65,7 +65,7 @@
             <Row>
                 <Col span="11">
                     <FormItem label="用户名" prop="username">
-                        <Input v-model="formTop.username" class="myinput">
+                        <Input v-model="formTop.username" maxlength="8" class="myinput">
                     </FormItem>
                 </Col>    
                 <Col span="11">
@@ -83,7 +83,7 @@
             <Row>
                 <Col span="11">
                     <FormItem label="姓名" prop="realname">
-                        <Input v-model="formTop.realname" class="myinput">
+                        <Input v-model="formTop.realname" maxlength="10" class="myinput">
                     </FormItem>
                 </Col>
                 <Col span="11">
@@ -99,7 +99,7 @@
             <Row>
                 <Col span="11">
                     <FormItem label="手机号" prop="phone">
-                        <Input v-model="formTop.phone" class="myinput">
+                        <Input v-model="formTop.phone" maxlength="11" class="myinput">
                     </FormItem>
                 </Col>    
                 <Col span="11">
@@ -285,29 +285,39 @@ export default {
         async submit() { 
             var d = new Date(this.formTop.birthday);
             this.formTop.birthday = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate()
-            console.log("写改后" + this.formTop.birthday)
-            console.log(this.formTop)
+            // console.log("写改后" + this.formTop.birthday)
+            // console.log(this.formTop)
             this.$refs['formTop'].validate((valid) => {
                 if (valid) {
                     this.infoValid = true;
                 } else {
-                    this.$Message.error('失败');
+                    this.$Message.error('填完必选项哦！');
                 }
             })
             if (this.infoValid == true) {
                 let res = await this.fetchBase('/user_update_info', {
                     content: this.formTop
                 })
-                console.log(res)
+                // console.log(res)
                 if (res['flag'] === global_.CONSTGET.SUCCESS) {
                     this.$Message.success('保存成功');
-                    console.log("保存成功了");
+                    if (this.formTop.username != this.formTemp.username) {
+                        // console.log("这是" + this.formTop.username)
+                        this.$emit('getChangeName', this.formTop.username)
+                    }
+                    // console.log("保存成功了");
                     this.infoValid = false
+                    // console.log(this.formTop.username)
+                    if (this.formTop.username != this.formTemp.username) {
+                        this.addCookie("username", this.formTop.username, 7, '/')
+                    }
+                    // console.log(document.cookie)    
                 } else if (res['flag'] === global_.CONSTGET.FAIL) {
                     this.$Message.error('保存失败')
                     this.infoValid = false
                 }
             }
+            document.documentElement.scrollTop = document.body.scrollTop = 0;
         },
         cancel() {
             this.formTop = JSON.parse(JSON.stringify(this.formTemp))
@@ -338,6 +348,18 @@ export default {
                 }
             }
             return ''
+        },
+        addCookie(name,value,days,path){  /**添加设置cookie**/
+            var name = escape(name);
+            var value = escape(value);
+            var expires = new Date();
+            expires.setTime(expires.getTime() + days * 3600000 * 24);
+            //path=/，表示cookie能在整个网站下使用，path=/temp，表示cookie只能在temp目录下使用
+            path = path == "" ? "" : ";path=" + path;
+            //GMT(Greenwich Mean Time)是格林尼治平时，现在的标准时间，协调世界时是UTC
+            //参数days只能是数字型
+            var _expires = (typeof days) == "string" ? "" : ";expires=" + expires.toUTCString();
+            document.cookie = name + "=" + value + _expires + path;
         },
     }
 }

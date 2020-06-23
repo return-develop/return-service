@@ -118,7 +118,7 @@
         console.log(document.cookie)
         if (this.getCookieValue("login") == "yes") {
           this.$Message.info("您已登录")
-          return
+          return 
         }
         if (this.formItem.email === '' || this.formItem.password === '') {
           this.$Message.warning('不能有内容为空')

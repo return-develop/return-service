@@ -1,6 +1,6 @@
 <template>
     <div class="app">
-        <div class="menu"><navigation></navigation></div>
+        <div class="menu"><navigation :changeName="changeName"></navigation></div>
         <div class="container">
             <div class="items">
                 <ul>
@@ -11,7 +11,7 @@
             </div>
             <!--:is实现多个组件实现同一个挂载点-->
             <div class="item-content">
-                <component :is="currentView"></component>
+                <component :is="currentView" @getChangeName0="getChangeName0"></component>
             </div>
         </div>
     </div>
@@ -27,6 +27,7 @@
             return {
                 active:0,
                 currentView:'MyInfo',
+                changeName: '',
                 tabs:[
                     {
                         type:'个人信息',
@@ -44,10 +45,14 @@
             }
         },
         methods: {
-            toggle(i,v){
+            toggle(i,v) {
                 this.active=i;
                 this.currentView=v;
-                }
+            },
+            getChangeName0(res) {
+                // console.log("祖先" + res)
+                this.changeName = res
+            }
         }
     }
 </script>
