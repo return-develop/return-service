@@ -28,6 +28,7 @@
     </div>
 </template>
 <script>
+import global_ from '../Const' 
 export default {
     data () {
         return {
@@ -55,42 +56,44 @@ export default {
     },
     methods: {
         async submit() {
+            if ( this.form.password1 !== this.form.password2) {
+                this.$Message.warning("两次密码不同")
+                return
+            }
             this.$refs['form'].validate((valid) => {
                 if (valid) {
                     this.infoValid = true;
                 } else {
                     this.$Message.error('修改失败');
                 }
-                if ( this.password1 != this.password2) {
-                    this.$Message.warning("两次密码不同")
-                    return
-                }
-                if (this.infoValid == true) {
-                    let res = await this.fetchBase('/reset_password', {
-                        "email": this.getCookieValue("email"),
-                        "oldPwd": this.password,
-                        "newPwd": this.password1
-                    })
-                    // console.log(res)
-                    if (res['flag'] === global_.CONSTGET.SUCCESS) {
-                        this.$Message.success('修改成功');
-                        this.addCookie("password", this.password1, 7, '/')
-                    } else if (res['flag'] === global_.CONSTGET.FAIL) {
-                        if (res['message'] === "password wrong") {
-                            this.$Message.error("原密码错误")
-                        } else {
-                            this.$Message.error("修改失败")
-                        }
-                        
-                    }
-                }
             })
+            if (this.infoValid == true) {
+                let res = await this.fetchBase('/user_update_password', {
+                    "email": this.getCookieValue("email"),
+                    "oldPwd": this.form.password,
+                    "newPwd": this.form.password1
+                })
+                // console.log(res)
+                if (res['flag'] === global_.CONSTGET.SUCCESS) {
+                    this.$Message.success('修改成功');
+                    this.addCookie("password", this.form.password1, 7, '/')
+                    this.reset()
+                } else if (res['flag'] === "password wrong") {
+                    this.$Message.error("原密码错误")
+                } else if (res['flag'] === global_.CONSTGET.FAIL) {
+                    this.$Message.error("修改失败")
+                }
+                this.infoValid = false
+            }
         },
         cancel() {
+            this.reset()
+            this.$Message.success('已取消');
+        },
+        reset() {
             this.form.password = ''
             this.form.password1 = ''
             this.form.password2 = ''
-            this.$Message.success('已取消');
         },
         fetchBase (url, body) {
             return fetch(url, {

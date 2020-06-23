@@ -12,7 +12,7 @@
                     <span style="padding: 0 10px;color:white;line-height:36px;max-length:100px;overflow:hidden;" v-if="isShow">你好，<span style="color:#5cadff;font-weight:600;">{{username}}</span></span>
                     <div class="dropdown-content" v-if="dropShow">
                         <a href="/mycenter" >个人中心</a>
-                        <a href="/" >退出登录</a>
+                        <a @click="logout">退出登录</a>
                     </div>
                     <!-- <Dropdown v-if="isShow">
                         <a style="padding: 0 10px;font-size: 12px" >你好，{{username}}</a>
@@ -38,15 +38,16 @@
         },
         data () {
             return{
-                isShow: true,
-                dropShow: true,
+                isShow: false,
+                dropShow: false,
                 username: '用户'
             }
         },
         created() {
             var url = window.location.href.split('/').filter(function (s) { return s && s.trim()})[2]
             console.log(document.cookie)
-            if (this.getCookieValue("login") == "yes" && url == 'mycenter'){
+            var isLogin = this.getCookieValue("login")
+            if (isLogin == "yes" && url == 'mycenter'){
                 this.isShow = true;
                 this.dropShow = false;
                 if (this.getCookieValue("username") == ""){
@@ -54,12 +55,16 @@
                 } else {
                     this.username = this.getCookieValue("username")
                 }
-            } else if (this.getCookieValue("login") == "" && url == 'mycenter') {
+            } else if (isLogin == "" && url == 'mycenter') {
                 this.$Message.warning("未登录，即将跳转到登录界面")
                 setTimeout(function () {
                     window.location.href = '/user_login/'
                     },2000)
-            } else if (this.getCookieValue("login") == "yes") {
+            } else if (isLogin == "") {
+                this.isShow = false
+                this.dropShow = false
+            }
+            else if (this.getCookieValue("login") == "yes") {
                 this.isShow = true;
                 this.dropShow = true;
                 if (this.getCookieValue("username").trim().length == 0){
@@ -78,11 +83,20 @@
             }
         },
         methods: {
-            toCenter() {
-                window.location.href = "/mycenter"
+            logout() {
+                this.deleteCookie('login', '/')
+                this.deleteCookie('username', '/')
+                if (this.getCookieValue("remember") == '') {
+                    this.deleteCookie('remember', '/')
+                }
+                this.$Message.info('已退出')
+                location.href = '/'
             },
-            toLogout() {
-                window.location.href = "/"
+            deleteCookie(name,path){  /**根据cookie的键，删除cookie，其实就是设置其失效**/
+                var name = escape(name);
+                var expires = new Date(0);
+                path = path == "" ? "" : ";path=" + path;
+                document.cookie = name + "="+ ";expires=" + expires.toUTCString() + path;
             },
             getCookieValue(name){ /**获取cookie的值，根据cookie的键获取值**/
                 //用处理字符串的方式查找到key对应value

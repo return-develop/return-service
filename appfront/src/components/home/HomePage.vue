@@ -306,7 +306,6 @@
     }
     .r-display{
         margin-left: 4%;
-        
     }
     .center-display{
         display: table-cell;

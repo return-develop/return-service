@@ -109,6 +109,7 @@ def login(request):
                 dic['flag'] = const_table.const.ACCOUNT_NOT_ACTIVETED
             else:
                 dic['flag'] = const_table.const.SUCCESS
+                dic['username'] = usertemp.username
         else:
             dic['flag'] = const_table.const.WRONG_ACCOUNT
     dic = json.dumps(dic)

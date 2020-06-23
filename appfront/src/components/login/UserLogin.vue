@@ -49,7 +49,8 @@
           modal: false,
           email: ''
         },
-        remember: false
+        remember: false,
+        cookieEnable: true
       }
     },
     created() {
@@ -57,6 +58,9 @@
         this.formItem.email = this.getCookieValue("email")
         this.formItem.password = this.getCookieValue("password")
         this.remember = true
+      }
+      if (navigator.cookieEnabled == false) {
+        this.cookieEnable = false
       }
     },
     methods: {
@@ -113,9 +117,12 @@
         this.findback.email = this.findback.email.trim()
       },
       async submit () {
+        if(this.cookieEnable == false){
+          this.$Message.warning("请开启cookie设置")
+          return
+        }
         // 检查是否为空
         this.trimItem()
-        console.log(document.cookie)
         if (this.getCookieValue("login") == "yes") {
           this.$Message.info("您已登录")
           return 
@@ -133,16 +140,17 @@
           this.$Message.success('登录成功!')
           this.addCookie("email", this.formItem.email, 7, "/")
           this.addCookie("password", this.formItem.password, 7, "/")
+          this.addCookie("username", res['username'], 7, "/")
           this.addCookie("login", "yes", 1, "/")
           if (this.remember === true) {
             this.addCookie("remember", "yes", 7, "/")
           } else {
-            this.addCookie("remember", "yes", 0, "/")
+            this.addCookie("remember", "", 7, "/")
           }
           console.log(document.cookie)
           setTimeout(function () {
               window.location.href = '/home/'
-            },2000)
+            },1000)
         // } else if (res['flag'] === global_.CONSTGET.ACCOUNT_LOGGED_IN) { //account has been logged in
         //   this.$Message.info('账号已登录!')
         //   setTimeout(function () {
