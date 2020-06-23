@@ -32,6 +32,7 @@ urlpatterns = [
     url(r'^mycenter/$', TemplateView.as_view(template_name = 'my_center.html')),
     url(r'^home/$', TemplateView.as_view(template_name = 'home_page.html')),
     url(r'^company/$', TemplateView.as_view(template_name = 'company_select.html')),
+    path('user_update_password', views.user_update_password),
     path('mailcheck', views.mailcheck),
     path('getback_password', views.getback_password),
     path('user_signup/', user.signup, name = 'signup'),
