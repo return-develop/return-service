@@ -18,6 +18,36 @@ from .models import Cityrelation
 def user_login(request):
     return render(request, 'user_login.html')
 
+def user_update_password(request):
+    info = json.loads(request.body.decode('utf8'))
+    dic = {}
+    emailtemp = info['email']
+    oldpwdtemp = info['oldPwd']
+    newpwdtemp = info['newPwd']
+    if User.objects.filter(email__contains = emailtemp):
+        usertemp = User.objects.get(email = emailtemp)
+        md5 = hashlib.md5()
+        oldpwdtemp += usertemp.salt
+        md5.update(oldpwdtemp.encode('utf8'))
+        if md5.hexdigest() == usertemp.password:
+            alteruser = User.objects.get(email = emailtemp)
+            saltnew = ''.join(random.sample(string.ascii_letters + string.digits, 8))
+            newpwdtemp += saltnew
+            md5 = hashlib.md5()
+            md5.update(newpwdtemp.encode('utf8'))
+            newpwdtemp = md5.hexdigest()
+            alteruser.password = newpwdtemp
+            alteruser.salt = saltnew
+            alteruser.save()
+            flag = 'success'
+        else:
+            flag = 'password wrong'
+    else:
+        flag = 'fail'
+    dic['flag'] = flag
+    dic = json.dumps(dic)
+    return HttpResponse(dic)
+
 def getback_password(request):
     """
     找回密码
