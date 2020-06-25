@@ -21,6 +21,7 @@ class User(models.Model):
     goal = models.CharField(max_length = 128, default = '')
     graduate_time = models.CharField(max_length = 16, default='')
     city = models.CharField(max_length = 128, default = '')
+    salary = models.CharField(max_length = 128, default = '')
     info = models.CharField(max_length = 256, default = '')
     hobby = models.CharField(max_length = 256, default = '')
     prize = models.CharField(max_length = 256, default = '')

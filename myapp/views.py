@@ -152,6 +152,7 @@ def user_update_info(request):
         goaltemp = info['goal']
         graduate_timetemp = info['graduate_time']
         citytemp = info['city']
+        salarytemp = info['salary']
         birthdaytemp = info['birthday']
         phonetemp = info['phone']
         emailtemp = info['email']
@@ -168,7 +169,8 @@ def user_update_info(request):
             alteruser.education = educationtemp        
             alteruser.goal = goaltemp        
             alteruser.graduate_time = graduate_timetemp       
-            alteruser.city = citytemp        
+            alteruser.city = citytemp
+            alteruser.salary = salarytemp  
             alteruser.birthday = birthdaytemp       
             alteruser.phone = phonetemp      
             alteruser.hobby = hobbytemp      
@@ -207,6 +209,7 @@ def user_view_info(request):
         dic['goal'] = usertemp.goal
         dic['graduate_time'] = usertemp.graduate_time
         dic['city'] = usertemp.city
+        dic['salary'] = usertemp.salary
         dic['info'] = usertemp.info
         dic['hobby'] = usertemp.hobby
         dic['prize'] = usertemp.prize
