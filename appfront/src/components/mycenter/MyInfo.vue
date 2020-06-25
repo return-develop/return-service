@@ -19,6 +19,8 @@
 <script>
 import DetailInfo from './DetailInfo'
 import global_ from '../Const' 
+import { getCookieValue } from '../../cookie/useCookie'
+import { fetchBase } from '../../post/fetchBase'
 export default {
     components:{DetailInfo},
     data () {
@@ -64,9 +66,9 @@ export default {
         }
     },
     async created() {
-        if (this.getCookieValue("login") === "yes") {
-            var email = this.getCookieValue("email")
-            let res = await this.fetchBase('/user_view_info', {
+        if (getCookieValue("login") === "yes") {
+            var email = getCookieValue("email")
+            let res = await fetchBase('/user_view_info', {
             'email': email,
             })
             console.log(res)
@@ -91,52 +93,6 @@ export default {
         }
     },
     methods: {
-        getCookieValue(name){ /**获取cookie的值，根据cookie的键获取值**/
-            //用处理字符串的方式查找到key对应value
-            var name = escape(name);
-            //读cookie属性，这将返回文档的所有cookie
-            var allcookies = document.cookie;
-            //查找名为name的cookie的开始位置
-            name += "=";
-            var pos = allcookies.indexOf(name);
-            //如果找到了具有该名字的cookie，那么提取并使用它的值
-            if (pos != -1){                       //如果pos值为-1则说明搜索"version="失败
-            var start = pos + name.length;         //cookie值开始的位置
-            var end = allcookies.indexOf(";",start);    //从cookie值开始的位置起搜索第一个";"的位置,即cookie值结尾的位置
-            if (end == -1) end = allcookies.length;    //如果end值为-1说明cookie列表里只有一个cookie
-            var value = allcookies.substring(start,end); //提取cookie的值
-            return (value);              //对它解码
-            }else{ //搜索失败，返回空字符串
-            return "";
-            }
-        },
-        fetchBase (url, body) {
-        return fetch(url, {
-          method: 'post',
-          credentials: 'same-origin',
-          headers: {
-            'X-CSRFToken': this.getCookie('csrftoken'),
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(body)
-        })
-        .then((res) => res.json())
-        },
-        getCookie (cName) {
-            if (document.cookie.length > 0) {
-            let cStart = document.cookie.indexOf(cName + '=')
-            if (cStart !== -1) {
-                cStart = cStart + cName.length + 1
-                let cEnd = document.cookie.indexOf(';', cStart)
-                if (cEnd === -1) {
-                cEnd = document.cookie.length
-                }
-                return unescape(document.cookie.substring(cStart, cEnd))
-            }
-            }
-            return ''
-        },
         getChangeName(res) {
             // console.log("父组件" + res)
             this.$emit('getChangeName0', res)

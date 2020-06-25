@@ -33,7 +33,8 @@ module.exports = {
     user_activate: './src/components/activate/user_activate.js',
     home_page: './src/components/home/home_page.js',
     my_center: './src/components/mycenter/my_center.js',
-    company: './src/components/company/company_select.js'
+    company: './src/components/company/company_select.js',
+    user_info: './src/components/userinfo/user_info.js'
   },
   output: {
     path: config.build.assetsRoot,

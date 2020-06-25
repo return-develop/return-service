@@ -32,17 +32,7 @@
 <script>
   import global_ from '../Const'
   import navigation from '../navigation'
-  // import Router from 'vue-router'
-  // import UserActivate from '@/components/activate/UserActivate'
-  // let router = new Router({
-  //       routes:[
-  //         {
-  //           path: '/user_activate',
-  //           name: 'UserActivate',
-  //           component: UserActivate
-  //         }
-  //       ]
-  //     })
+  import { fetchBase } from '../../post/fetchBase'
   export default {
     components: {navigation},
     data () {
@@ -55,39 +45,12 @@
       }
     },
     methods: {
-      fetchBase (url, body) {
-        return fetch(url, {
-          method: 'post',
-          credentials: 'same-origin',
-          headers: {
-            'X-CSRFToken': this.getCookie('csrftoken'),
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(body)
-        })
-        .then((res) => res.json())
-      },
       trans () {
         // 向父组件发送切换到登录界面消息
         // window.location.href = '/user_activate/'
         var email = this.formItem.email
         var myurl="/user_activate"+"?"+"email=" + email
         window.location.assign(encodeURI(myurl)) 
-      },
-      getCookie (cName) {
-        if (document.cookie.length > 0) {
-          let cStart = document.cookie.indexOf(cName + '=')
-          if (cStart !== -1) {
-            cStart = cStart + cName.length + 1
-            let cEnd = document.cookie.indexOf(';', cStart)
-            if (cEnd === -1) {
-              cEnd = document.cookie.length
-            }
-            return unescape(document.cookie.substring(cStart, cEnd))
-          }
-        }
-        return ''
       },
       checkEmail (email) {
         var ePattern = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/g
@@ -123,7 +86,7 @@
           this.$Message.warning('密码长度至少为8位')
           return
         }
-        let res = await this.fetchBase('/api/user/signup/', {
+        let res = await fetchBase('/api/user/signup/', {
           'email': this.formItem.email,
           'password': this.formItem.password
         })

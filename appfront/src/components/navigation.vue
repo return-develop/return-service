@@ -29,6 +29,7 @@
     </ul>
 </template>
 <script>
+    import { addCookie, getCookieValue, deleteCookie } from '../cookie/useCookie'
     export default {
         props: {
             changeName: {
@@ -46,14 +47,14 @@
         created() {
             var url = window.location.href.split('/').filter(function (s) { return s && s.trim()})[2]
             console.log(document.cookie)
-            var isLogin = this.getCookieValue("login")
+            var isLogin = getCookieValue("login")
             if (isLogin == "yes" && url == 'mycenter'){
                 this.isShow = true;
                 this.dropShow = false;
-                if (this.getCookieValue("username") == ""){
-                    this.username = this.getCookieValue("email")
+                if (getCookieValue("username") == ""){
+                    this.username = getCookieValue("email")
                 } else {
-                    this.username = this.getCookieValue("username")
+                    this.username = getCookieValue("username")
                 }
             } else if (isLogin == "" && url == 'mycenter') {
                 this.$Message.warning("未登录，即将跳转到登录界面")
@@ -64,13 +65,13 @@
                 this.isShow = false
                 this.dropShow = false
             }
-            else if (this.getCookieValue("login") == "yes") {
+            else if (getCookieValue("login") == "yes") {
                 this.isShow = true;
                 this.dropShow = true;
-                if (this.getCookieValue("username").trim().length == 0){
-                    this.username = this.getCookieValue("email")
+                if (getCookieValue("username").trim().length == 0){
+                    this.username = getCookieValue("email")
                 } else {
-                    this.username = this.getCookieValue("username")
+                    this.username = getCookieValue("username")
                 }
             }
         },
@@ -84,39 +85,14 @@
         },
         methods: {
             logout() {
-                this.deleteCookie('login', '/')
-                this.deleteCookie('username', '/')
-                if (this.getCookieValue("remember") == '') {
-                    this.deleteCookie('remember', '/')
+                deleteCookie('login', '/')
+                deleteCookie('username', '/')
+                if (getCookieValue("remember") == '') {
+                    deleteCookie('remember', '/')
                 }
                 this.$Message.info('已退出')
                 location.href = '/'
-            },
-            deleteCookie(name,path){  /**根据cookie的键，删除cookie，其实就是设置其失效**/
-                var name = escape(name);
-                var expires = new Date(0);
-                path = path == "" ? "" : ";path=" + path;
-                document.cookie = name + "="+ ";expires=" + expires.toUTCString() + path;
-            },
-            getCookieValue(name){ /**获取cookie的值，根据cookie的键获取值**/
-                //用处理字符串的方式查找到key对应value
-                var name = escape(name);
-                //读cookie属性，这将返回文档的所有cookie
-                var allcookies = document.cookie;
-                //查找名为name的cookie的开始位置
-                name += "=";
-                var pos = allcookies.indexOf(name);
-                //如果找到了具有该名字的cookie，那么提取并使用它的值
-                if (pos != -1){                       //如果pos值为-1则说明搜索"version="失败
-                    var start = pos + name.length;         //cookie值开始的位置
-                    var end = allcookies.indexOf(";",start);    //从cookie值开始的位置起搜索第一个";"的位置,即cookie值结尾的位置
-                    if (end == -1) end = allcookies.length;    //如果end值为-1说明cookie列表里只有一个cookie
-                    var value = allcookies.substring(start,end); //提取cookie的值
-                    return unescape(value);              //对它解码
-                }else{ //搜索失败，返回空字符串
-                    return "";
-                }
-            },
+            }
         }
     }
 </script>

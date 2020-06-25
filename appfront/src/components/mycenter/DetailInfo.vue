@@ -164,6 +164,8 @@
 </template>
 <script>
 import global_ from '../Const'
+import { addCookie } from '../../cookie/useCookie'
+import { fetchBase } from '../../post/fetchBase'
 export default {
     props: ["sendForm"],
     data () {
@@ -295,7 +297,7 @@ export default {
                 }
             })
             if (this.infoValid == true) {
-                let res = await this.fetchBase('/user_update_info', {
+                let res = await fetchBase('/user_update_info', {
                     content: this.formTop
                 })
                 // console.log(res)
@@ -309,7 +311,7 @@ export default {
                     this.infoValid = false
                     // console.log(this.formTop.username)
                     if (this.formTop.username != this.formTemp.username) {
-                        this.addCookie("username", this.formTop.username, 7, '/')
+                        addCookie("username", this.formTop.username, 7, '/')
                     }
                     // console.log(document.cookie)    
                 } else if (res['flag'] === global_.CONSTGET.FAIL) {
@@ -321,45 +323,6 @@ export default {
         },
         cancel() {
             this.formTop = JSON.parse(JSON.stringify(this.formTemp))
-        },
-        fetchBase (url, body) {
-            return fetch(url, {
-            method: 'post',
-            credentials: 'same-origin',
-            headers: {
-                'X-CSRFToken': this.getCookie('csrftoken'),
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(body)
-            })
-            .then((res) => res.json())
-        },
-        getCookie (cName) {
-            if (document.cookie.length > 0) {
-                let cStart = document.cookie.indexOf(cName + '=')
-                if (cStart !== -1) {
-                    cStart = cStart + cName.length + 1
-                    let cEnd = document.cookie.indexOf(';', cStart)
-                    if (cEnd === -1) {
-                    cEnd = document.cookie.length
-                    }
-                    return unescape(document.cookie.substring(cStart, cEnd))
-                }
-            }
-            return ''
-        },
-        addCookie(name,value,days,path){  /**添加设置cookie**/
-            var name = escape(name);
-            var value = escape(value);
-            var expires = new Date();
-            expires.setTime(expires.getTime() + days * 3600000 * 24);
-            //path=/，表示cookie能在整个网站下使用，path=/temp，表示cookie只能在temp目录下使用
-            path = path == "" ? "" : ";path=" + path;
-            //GMT(Greenwich Mean Time)是格林尼治平时，现在的标准时间，协调世界时是UTC
-            //参数days只能是数字型
-            var _expires = (typeof days) == "string" ? "" : ";expires=" + expires.toUTCString();
-            document.cookie = name + "=" + value + _expires + path;
         },
     }
 }

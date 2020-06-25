@@ -21,6 +21,7 @@
 <script>
 import navigation from '../navigation'
 import global_ from '../Const'
+import { fetchBase } from '../../post/fetchBase'
 export default {
     components:{navigation},
     data () {
@@ -56,39 +57,12 @@ export default {
       }
     },
     methods: {
-      fetchBase (url, body) {
-        return fetch(url, {
-          method: 'post',
-          credentials: 'same-origin',
-          headers: {
-            'X-CSRFToken': this.getCookie('csrftoken'),
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(body)
-        })
-        .then((res) => res.json())
-      },
-      getCookie (cName) {
-        if (document.cookie.length > 0) {
-          let cStart = document.cookie.indexOf(cName + '=')
-          if (cStart !== -1) {
-            cStart = cStart + cName.length + 1
-            let cEnd = document.cookie.indexOf(';', cStart)
-            if (cEnd === -1) {
-              cEnd = document.cookie.length
-            }
-            return unescape(document.cookie.substring(cStart, cEnd))
-          }
-        }
-        return ''
-      },
       reset () {
         this.formItem.active_code = ''
       },
       async settime() {
         this.isShow = false
-        let res = await this.fetchBase('/api/user/activate/', {
+        let res = await fetchBase('/api/user/activate/', {
           'email': this.formItem.email.trim(),
           'message': 'user activate'
         })
@@ -126,7 +100,7 @@ export default {
         }
         if (this.formItem.active_code === this.activate_code) {
           console.log("激活码正确")
-          let res = await this.fetchBase('/api/user/check_activate/', {
+          let res = await fetchBase('/api/user/check_activate/', {
           'email': this.formItem.email,
           'isactivate': "true"
           })

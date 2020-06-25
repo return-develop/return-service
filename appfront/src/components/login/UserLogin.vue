@@ -37,6 +37,8 @@
 <script>
   import global_ from '../Const' 
   import navigation from '../navigation'
+  import { addCookie, getCookieValue, deleteCookie } from '../../cookie/useCookie'
+  import { fetchBase } from '../../post/fetchBase'
   export default {
     components: {navigation},
     data () {
@@ -54,9 +56,9 @@
       }
     },
     created() {
-      if (this.getCookieValue("remember") == "yes") {
-        this.formItem.email = this.getCookieValue("email")
-        this.formItem.password = this.getCookieValue("password")
+      if (getCookieValue("remember") == "yes") {
+        this.formItem.email = getCookieValue("email")
+        this.formItem.password = getCookieValue("password")
         this.remember = true
       }
       if (navigator.cookieEnabled == false) {
@@ -64,25 +66,12 @@
       }
     },
     methods: {
-      fetchBase (url, body) {
-        return fetch(url, {
-          method: 'post',
-          credentials: 'same-origin',
-          headers: {
-            'X-CSRFToken': this.getCookie('csrftoken'),
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(body)
-        })
-        .then((res) => res.json())
-      },
       findEmail () {
         this.findback.modal = !this.findback.modal
       },
       async ok () {
         this.trimItem()
-        let res = await this.fetchBase('/api/user/findback_password/', {
+        let res = await fetchBase('/api/user/findback_password/', {
           'email': this.formItem.email
         })
         console.log(res)
@@ -93,20 +82,6 @@
         }
       },
       cancel () {},
-      getCookie (cName) {
-        if (document.cookie.length > 0) {
-          let cStart = document.cookie.indexOf(cName + '=')
-          if (cStart !== -1) {
-            cStart = cStart + cName.length + 1
-            let cEnd = document.cookie.indexOf(';', cStart)
-            if (cEnd === -1) {
-              cEnd = document.cookie.length
-            }
-            return unescape(document.cookie.substring(cStart, cEnd))
-          }
-        }
-        return ''
-      },
       reset () {
         this.formItem.email = ''
         this.formItem.password = ''
@@ -123,7 +98,7 @@
         }
         // 检查是否为空
         this.trimItem()
-        if (this.getCookieValue("login") == "yes") {
+        if (getCookieValue("login") == "yes") {
           this.$Message.info("您已登录")
           return 
         }
@@ -131,21 +106,21 @@
           this.$Message.warning('不能有内容为空')
           return
         }
-        let res = await this.fetchBase('/api/user/login/', {
+        let res = await fetchBase('/api/user/login/', {
           'email': this.formItem.email,
           'password': this.formItem.password
         })
         // this.reset()
         if (res['flag'] === global_.CONSTGET.SUCCESS) { //success
           this.$Message.success('登录成功!')
-          this.addCookie("email", this.formItem.email, 7, "/")
-          this.addCookie("password", this.formItem.password, 7, "/")
-          this.addCookie("username", res['username'], 7, "/")
-          this.addCookie("login", "yes", 1, "/")
+          addCookie("email", this.formItem.email, 7, "/")
+          addCookie("password", this.formItem.password, 7, "/")
+          addCookie("username", res['username'], 7, "/")
+          addCookie("login", "yes", 1, "/")
           if (this.remember === true) {
-            this.addCookie("remember", "yes", 7, "/")
+            addCookie("remember", "yes", 7, "/")
           } else {
-            this.addCookie("remember", "", 7, "/")
+            addCookie("remember", "", 7, "/")
           }
           console.log(document.cookie)
           setTimeout(function () {
@@ -169,44 +144,6 @@
           this.formItem.password = ''
         } 
       },
-      addCookie(name,value,days,path){  /**添加设置cookie**/
-        var name = escape(name);
-        var value = escape(value);
-        var expires = new Date();
-        expires.setTime(expires.getTime() + days * 3600000 * 24);
-        //path=/，表示cookie能在整个网站下使用，path=/temp，表示cookie只能在temp目录下使用
-        path = path == "" ? "" : ";path=" + path;
-        //GMT(Greenwich Mean Time)是格林尼治平时，现在的标准时间，协调世界时是UTC
-        //参数days只能是数字型
-        var _expires = (typeof days) == "string" ? "" : ";expires=" + expires.toUTCString();
-        document.cookie = name + "=" + value + _expires + path;
-      },
-      getCookieValue(name){ /**获取cookie的值，根据cookie的键获取值**/
-        //用处理字符串的方式查找到key对应value
-        var name = escape(name);
-        //读cookie属性，这将返回文档的所有cookie
-        var allcookies = document.cookie;
-        //查找名为name的cookie的开始位置
-        name += "=";
-        var pos = allcookies.indexOf(name);
-        //如果找到了具有该名字的cookie，那么提取并使用它的值
-        if (pos != -1){                       //如果pos值为-1则说明搜索"version="失败
-          var start = pos + name.length;         //cookie值开始的位置
-          var end = allcookies.indexOf(";",start);    //从cookie值开始的位置起搜索第一个";"的位置,即cookie值结尾的位置
-          if (end == -1) end = allcookies.length;    //如果end值为-1说明cookie列表里只有一个cookie
-          var value = allcookies.substring(start,end); //提取cookie的值
-          return (value);              //对它解码
-        }else{ //搜索失败，返回空字符串
-          return "";
-        }
-      },
-      deleteCookie(name,path){  /**根据cookie的键，删除cookie，其实就是设置其失效**/
-        var name = escape(name);
-        var expires = new Date(0);
-        path = path == "" ? "" : ";path=" + path;
-        document.cookie = name + "="+ ";expires=" + expires.toUTCString() + path;
-      },
-
     }
   }
 </script>

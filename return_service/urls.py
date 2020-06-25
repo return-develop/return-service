@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^user_activate/$', TemplateView.as_view(template_name = 'user_activate.html')),
     url(r'^mycenter/$', TemplateView.as_view(template_name = 'my_center.html')),
     url(r'^home/$', TemplateView.as_view(template_name = 'home_page.html')),
+    url(r'^user_info/$', TemplateView.as_view(template_name = 'user_info.html')),
     url(r'^company/$', TemplateView.as_view(template_name = 'company_select.html')),
     path('user_update_password', views.user_update_password),
     path('mailcheck', views.mailcheck),
