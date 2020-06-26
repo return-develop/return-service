@@ -89,6 +89,7 @@
 </div>
 </template>
 <script>
+import { addCookie } from '../../cookie/useCookie'
 export default {
     data() {
         return {
@@ -177,6 +178,7 @@ export default {
                 if (valid) {
                     console.log("填写成功")
                     console.log(this.formTop)
+                    addCookie('username', this.formTop.username, 30, '/')
                     this.$emit("getForm", this.formTop)
                     this.$emit("getCurrent", 1)
                 } else {

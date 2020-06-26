@@ -2,15 +2,17 @@
     <div id="show-info">
         <div class="introduce" v-if="isShow"> 
             <div class="uname">
-                <span>{{formTop.username}}</span>
-                <span style="padding:0;font-size:1.6em;">|</span>
-                <span>{{formTop.sex}}</span>
+                <div class="uuname">
+                    <span>{{formTop.username}}</span>
+                    <span style="padding:0;font-size:1.6em;">|</span>
+                    <span>{{formTop.sex}}</span>
+                </div>
                 <div class="complete"><Progress :percent="percent" :stroke-width="18" text-inside /></div>
             </div>
             <div class="info">
                 <li class="sp"><div>学校：<span>{{formTop.school}}</span></div><div>专业：<span>{{formTop.major}}</span></div><div><Icon type="ios-create-outline" /><a @click="isShow = false">编辑</a></div></li>
-                <li class="gg"><div>工作目标：<span>{{formTop.goal}}</span></div><div>毕业时间：<span>{{formTop.graduate_time}}</span></div></li>
-                <li class="dc"><div>期望工作地点：<span>{{formTop.city}}</span></div></li>
+                <li class="gg"><div>工作目标：<span>{{goal}}</span></div><div>期待薪资：<span>{{salary}}</span></div></li>
+                <li class="dc"><div>期望工作地点：<span>{{city}}</span></div></li>
             </div>
         </div>
         <div v-if="!isShow" class="detail-info"><DetailInfo :sendForm="sendForm" @getChangeName="getChangeName"></DetailInfo></div>
@@ -29,6 +31,9 @@ export default {
             percent: 0,
             sum: 0,
             changeName: '',
+            goal: '',
+            city: '',
+            salary: '',
             formTop: {
                 username: '用户名',
                 realname:'',
@@ -36,9 +41,10 @@ export default {
                 school: '待填写',
                 major: '待填写',
                 education: '待填写',
-                goal: '待填写',
+                goal: [],
                 graduate_time: '待填写',
-                city: '待填写',
+                city: [],
+                salary: '',
                 birthday:'',
                 phone: '',
                 email: '',
@@ -53,9 +59,10 @@ export default {
                 school: '',
                 major: '',
                 education: '',
-                goal: '',
+                goal: [],
                 graduate_time: '',
-                city: '',
+                city: [],
+                salary: '',
                 birthday:'',
                 phone: '',
                 email: '',
@@ -76,11 +83,26 @@ export default {
                 delete res['flag']
                 for (var item in res) {
                     this.sendForm[item] = res[item]
-                    if (res[item].trim().length > 0) {
+                    if (res[item] != '') {
                         this.formTop[item] = res[item]
                         this.sum += 1
                     }
                 }
+                for(var item in this.formTop.goal) {
+                    if (item == this.formTop.goal.length -1) {
+                        this.goal += this.formTop.goal[item]
+                    } else {
+                        this.goal += this.formTop.goal[item] + '、'
+                    }
+                }
+                for(var item in this.formTop.city) {
+                    if (item == this.formTop.city.length -1) {
+                        this.city += this.formTop.city[item]
+                    } else {
+                        this.city += this.formTop.city[item] + '、'
+                    }
+                }
+                this.salary = this.formTop.salary.replace(/[\[\]']/g, '')
                 this.percent = parseInt(parseInt(this.sum) * 100 / parseInt(Object.keys(this.formTop).length))
                 console.log("sum:" + this.sum + "percent:" + this.percent)
                 this.sum = 0
@@ -123,28 +145,38 @@ export default {
     background-color: #d7d7d7;
     width: 100%;
     height: 70px;
+    display: flex;
 }
-.uname span {
+.uuname {
+    width: 36%;
+    height: 100%;
+    overflow: hidden;
+}
+.uuname span {
     font-size: 20px;
     font-weight: 700;
     line-height: 70px;
 }
-.uname a{
+.uuname a{
     font-size: 16px;
     line-height: 70px;
     padding-right: 20px;
 }
-.uname span {
+.uuname span {
     padding: 0 12px;
 }
-.uname a {
+.uuname a {
     float: right;
 }
 .complete {
     float: right;
     width: 64%;
     padding-right: 12px;
-    position: relative;
+    /* position: relative;
+    top: 50%;
+    transform: translateY(-50%); */
+}
+.complete >>> .ivu-progress {
     top: 50%;
     transform: translateY(-50%);
 }
@@ -171,7 +203,7 @@ export default {
     width: 35%;
 }
 .sp div span, .gg div span, .dc div span {
-    font-size: 1em;
+    font-size: 14px;
     font-weight: 500;
     overflow: hidden;
 }

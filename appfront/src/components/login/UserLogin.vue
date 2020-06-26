@@ -52,7 +52,8 @@
           email: ''
         },
         remember: false,
-        cookieEnable: true
+        cookieEnable: true,
+        isLogin: false
       }
     },
     created() {
@@ -113,6 +114,7 @@
         // this.reset()
         if (res['flag'] === global_.CONSTGET.SUCCESS) { //success
           this.$Message.success('登录成功!')
+          this.isLogin = true
           addCookie("email", this.formItem.email, 7, "/")
           addCookie("password", this.formItem.password, 7, "/")
           addCookie("username", res['username'], 7, "/")
@@ -123,9 +125,9 @@
             addCookie("remember", "", 7, "/")
           }
           console.log(document.cookie)
-          setTimeout(function () {
-              window.location.href = '/home/'
-            },1000)
+          // setTimeout(function () {
+          //     window.location.href = '/home/'
+          //   },1000)
         // } else if (res['flag'] === global_.CONSTGET.ACCOUNT_LOGGED_IN) { //account has been logged in
         //   this.$Message.info('账号已登录!')
         //   setTimeout(function () {
@@ -143,6 +145,19 @@
           this.$Message.error('密码错误!')
           this.formItem.password = ''
         } 
+        if (this.isLogin === true) {
+          let response = await fetchBase('/user_view_info', {
+            'email': this.formItem.email,
+            })
+          if (res['flag'] === global_.CONSTGET.SUCCESS) {
+            if (res['username'] != '') {
+              window.location.href = '/home'
+            } else {
+              window.location.href = '/user_info'
+            }
+          }
+          this.isLogin = false
+        }
       },
     }
   }

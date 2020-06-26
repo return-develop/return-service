@@ -1,7 +1,7 @@
 <template>
     <ul class="topmenu">
         <li class="menu-item1"><a href="/home" class="active">首页</a></li>
-        <li class="menu-item2"><a href="/">就业咨询</a></li>
+        <li class="menu-item2"><a href="/job_consult">就业咨询</a></li>
         <li class="menu-item3"><a href="/">定制企业清单</a></li>
         <span class="else-item">
             <li class="login-register menu-item1">

@@ -34,7 +34,8 @@ module.exports = {
     home_page: './src/components/home/home_page.js',
     my_center: './src/components/mycenter/my_center.js',
     company: './src/components/company/company_select.js',
-    user_info: './src/components/userinfo/user_info.js'
+    user_info: './src/components/userinfo/user_info.js',
+    job_consult: './src/components/consult/job_consult.js'
   },
   output: {
     path: config.build.assetsRoot,

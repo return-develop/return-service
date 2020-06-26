@@ -22,15 +22,15 @@
 </template>
 <script>
 import navigation from '../navigation'
+import global_ from '../Const'
 import FillStep from './FillStep'
 import PersonInfo from './PersonInfo'
 import DetailedInfo from './DetailedInfo'
 import JobRequire from './JobRequire'
-import FillComplete from './FillComplete'
 import { addCookie, getCookieValue } from '../../cookie/useCookie'
 import { fetchBase } from '../../post/fetchBase'
 export default {
-    components: {navigation, FillStep, PersonInfo, DetailedInfo, JobRequire, FillComplete},
+    components: {navigation, FillStep, PersonInfo, DetailedInfo, JobRequire},
     data() {
         return {
             changeCurrent: 0,
@@ -47,10 +47,6 @@ export default {
                     {
                         type:'求职需求',
                         view:'JobRequire'
-                    },
-                    {
-                        type:'已完成',
-                        view:'FillComplete'
                     }
                 ],
             formTop: {
@@ -95,7 +91,8 @@ export default {
                 })
                 console.log(res)
                 if (res['flag'] === global_.CONSTGET.SUCCESS) {
-                    
+                    console.log(res['flag'])
+                    this.$Message.success("成功")
                 } else {
                     this.$Message.warning('服务器错误')
                 }

@@ -178,6 +178,18 @@ const webpackConfig = merge(baseWebpackConfig, {
       },
       chunksSortMode: 'dependency'
     }),
+    new HtmlWebpackPlugin({
+      filename: 'job_consult.html',
+      template: './src/components/consult/job_consult.html',
+      inject: true,
+      chunks:['manifest', 'vendor', 'job_consult'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
    
     // keep module.id stable when vendor modules does not change
     new webpack.HashedModuleIdsPlugin(),

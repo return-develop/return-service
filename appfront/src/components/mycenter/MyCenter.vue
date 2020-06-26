@@ -5,7 +5,7 @@
             <div class="items">
                 <ul>
                     <li v-for="(tab,index) in tabs" @click="toggle(index,tab.view)" :class="{active:active==index}" class="li-item">
-                    {{tab.type}}
+                    <Icon :type="tab.logo" style="padding-right: 10px;" />{{tab.type}}
                     </li>
                 </ul>
             </div>
@@ -31,15 +31,18 @@
                 tabs:[
                     {
                         type:'个人信息',
-                        view:'MyInfo'
+                        view:'MyInfo',
+                        logo:'md-person-add'
                     },
                     {
                         type:'修改密码',
-                        view:'ResetPassword'
+                        view:'ResetPassword',
+                        logo:'md-create'
                     },
                     {
                         type:'退出登录',
-                        view:'LogOut'
+                        view:'LogOut',
+                        logo:'md-power'
                     }
                 ]
             }
@@ -69,7 +72,7 @@
     }
     .items ul li {
         color: #9b9b9b;
-        font-size: 1.2em;
+        font-size: 16px;
         padding-bottom: 70px;
     }
     .items ul li:first-child {
