@@ -68,16 +68,13 @@ class Cityrelation(models.Model):
 class Work(models.Model):
     id = models.AutoField(primary_key = True)
     company_name = models.CharField(max_length = 128, default = '')
-    url = models.CharField(max_length = 256, default = '')
     name = models.CharField(max_length = 128, default = '')
     education = models.CharField(max_length = 128, default = '')
     subject = models.CharField(max_length = 128, default = '')
     place = models.CharField(max_length = 128, default = '')
-    salarylow = models.IntegerField(default = '')
-    salaryhigh = models.IntegerField(default = '')
-    info = models.CharField(max_length = 256, default = '')
-    request = models.CharField(max_length = 256, default = '')
-    interview = models.BooleanField(default = False)
+    salary = models.CharField(max_length = 128, default = '')
+    exp = models.CharField(max_length = 128, default = '')
+    info = models.CharField(max_length = 8192, default = '')
     
     def __unicode__(self):
         return self.id

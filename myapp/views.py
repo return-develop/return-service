@@ -7,13 +7,14 @@ from django.core.files.base import ContentFile
 from django.core import serializers
 from django.core.mail import send_mail, send_mass_mail, EmailMultiAlternatives
 import json, hashlib, time, string
-import random
+import random, csv
 from django.conf import settings
 from .models import User
 from .models import Subject
 from .models import Subrelation
 from .models import City
 from .models import Cityrelation
+from .models import Work
 
 def user_login(request):
     return render(request, 'user_login.html')
@@ -527,3 +528,20 @@ def cityrelation_view(request):
         dic['result_code'] = 400
         dic = json.dumps(dic)
         return HttpResponse(dic)
+
+def importcsv(request):
+    csvfile_path = r'C:/Users/XieMinghao/Documents/GitHub/return-service/data.csv'
+    with open(csvfile_path) as f:
+        reader = csv.reader(f)
+        for row in reader:
+            Work.objects.create(
+                # field1是字段名，row[0]是csv文件的第1列，以此类推
+                name = row[0],
+                salary = row[1],
+                place = row[2],
+                education = row[3],
+                exp = row[4],
+                company_name = row[5],
+                subject = row[6],
+                info = row[7]
+            )

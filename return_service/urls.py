@@ -56,6 +56,7 @@ urlpatterns = [
     path('cityrelation_delete', views.cityrelation_delete),
     path('cityrelation_update', views.cityrelation_update),
     path('cityrelation_view', views.cityrelation_view),
+    path('importcsv', views.importcsv),
 
     # api
     url(r'^api/findback_password/$', user.logout),  #todo   
