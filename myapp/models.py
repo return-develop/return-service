@@ -92,7 +92,19 @@ class Company(models.Model):
     
     def __unicode__(self):
         return self.id
-        
+
+class Course(models.Model):
+    id = models.AutoField(primary_key = True)
+    name = models.CharField(max_length = 128, default = '')
+    teacher = models.CharField(max_length = 128, default = '')
+    time = models.CharField(max_length = 128, default = '')
+    originalprice = models.IntegerField()
+    currentprice = models.IntegerField()
+    info = models.CharField(max_length = 256, default = '')
+
+    def __unicode__(self):
+        return self.id
+
 class Order(models.Model):
     orderstatus = (
         ('ready', '有效'),
@@ -100,9 +112,8 @@ class Order(models.Model):
         ('expire', '已过期'),
     )
     id = models.AutoField(primary_key = True)
-    user_id = models.IntegerField(default = 0)
-    timestart = models.DateTimeField()
-    timeend = models.DateTimeField()
+    email = models.EmailField(unique = True, default = '')
+    course_id = models.IntegerField()
     status = models.CharField(max_length = 32, choices = orderstatus, default = '有效')
     
     def __unicode__(self):
