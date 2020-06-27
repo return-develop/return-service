@@ -96,10 +96,18 @@ class Company(models.Model):
 class Course(models.Model):
     id = models.AutoField(primary_key = True)
     name = models.CharField(max_length = 128, default = '')
-    teacher = models.CharField(max_length = 128, default = '')
+    teacher_id = models.IntegerField(default = 0)
     time = models.CharField(max_length = 128, default = '')
-    originalprice = models.IntegerField()
-    currentprice = models.IntegerField()
+    originalprice = models.IntegerField(default = 0)
+    currentprice = models.IntegerField(default = 0)
+    info = models.CharField(max_length = 256, default = '')
+
+    def __unicode__(self):
+        return self.id
+
+class Teacher(models.Model):
+    id = models.AutoField(primary_key = True)
+    name = models.CharField(max_length = 128, default = '')
     info = models.CharField(max_length = 256, default = '')
 
     def __unicode__(self):
@@ -113,7 +121,7 @@ class Order(models.Model):
     )
     id = models.AutoField(primary_key = True)
     email = models.EmailField(unique = True, default = '')
-    course_id = models.IntegerField()
+    course_id = models.IntegerField(default = 0)
     status = models.CharField(max_length = 32, choices = orderstatus, default = '有效')
     
     def __unicode__(self):
