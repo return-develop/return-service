@@ -1,7 +1,7 @@
 <template>
     <div class="app">
         <div class="menu"><navigation></navigation></div>
-        <div class="container">
+        <div class="container" v-if="isShow">
             <div class="introduce">
                 <h1 style="text-align: center">名师1V1咨询</h1>
                 <div class="introduce-title">
@@ -70,6 +70,52 @@
                 </Tabs>
             </div>
         </div>
+        <div class="order-consult" v-if="!isShow">
+            <Breadcrumb class="my-crumb" separator=">>">
+                <BreadcrumbItem to="/home">
+                    <Icon type="ios-home-outline"></Icon> 首页
+                </BreadcrumbItem>
+                <BreadcrumbItem to="/job_consult">
+                    <Icon type="logo-buffer"></Icon> 就业咨询
+                </BreadcrumbItem>
+                <BreadcrumbItem></BreadcrumbItem>
+            </Breadcrumb>
+            <div class="order-step">
+                <div class="order-step-title">
+                    预约信息
+                </div>
+                <div class="order-step-content">
+                    <Form :label-width="100" class="order-step-content-form">
+                        <FormItem label="上课平台" style="width: 100%;">
+                            <RadioGroup v-model="order_info.radio" style="margin-left:20px">
+                                <!-- <Radio label="wechat"><img src="../../../static/img/wechat.jpg" class="order-step-way"></Radio>
+                                <Radio label="tencent"><img src="../../../static/img/tencent_meeting.jpg" class="order-step-way"></Radio>
+                                <Radio label="feishu"><img src="../../../static/img/fly_book.jpg" class="order-step-way"></Radio> -->
+                                <Radio label="wechat">微信</Radio>
+                                <Radio label="tencent">飞书</Radio>
+                                <Radio label="feishu">腾讯会议</Radio>
+                            </RadioGroup>
+                        </FormItem>
+                        <FormItem label="所选平台账号" style="width: 100%;">
+                            <Input v-model="order_info.account" placeholder="为了方便联系您，请填写所选平台账号..." style="margin-left:20px">
+                        </FormItem>
+                        <FormItem label="选择时间" style="width: 100%;">
+                            <DatePicker v-model="order_info.date" type="date" style="margin-left:20px"></DatePicker>
+                        </FormItem>
+                        <FormItem label="预约时段" style="width: 100%;">
+                            <RadioGroup v-model="order_info.time" style="margin-left:20px">
+                                <Radio label="上午">上午</Radio>
+                                <Radio label="下午">下午</Radio>
+                            </RadioGroup>
+                        </FormItem>
+                        <FormItem style="width: 100%;">
+                            <Button type="primary" @click.native="submitOrder" style="margin-left:20px">确认预约</Button>
+                            <Button style="margin-left: 20px" @click.native="cancelOrder">取消预约</Button>
+                        </FormItem>
+                    </Form>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -80,6 +126,7 @@ export default {
     data() {
         return {
             username: '',
+            isShow: false,
             counselor: [
                 {
                     url: '../../../static/img/curry.jpg',
@@ -153,7 +200,13 @@ export default {
                     way: '飞书',
                     phone: "12345678"
                 }
-            ]
+            ],
+            order_info: {
+                radio: 'wechat',
+                account: '',
+                date: "",
+                time: '',
+            }
         }
     },
     created() {
@@ -171,6 +224,14 @@ export default {
               window.location.href = '/user_login'
             },2000)
         }
+    },
+    methods: {
+        submitOrder() {
+
+        },
+        cancelOrder() {
+            
+        }
     }
 }
 </script>
@@ -184,7 +245,7 @@ export default {
 	background-repeat: no-repeat;
     opacity: 0.5; */
     background-color: #d8d8d8;
-    background-image: linear-gradient(#fff, #575c5c);
+    /* background-image: linear-gradient(#d8d8d8, #575c5c); */
 }
 .introduce {
     width: 84vw;
@@ -347,4 +408,55 @@ export default {
     font-size: 18px;
     color: black;
 }
+.order-consult {
+    width: 84%;
+    height: auto;
+    margin: 5vh auto 0;
+    /* background-color: white; */
+}
+.order-consult >>> .ivu-breadcrumb a {
+    color: black;
+}
+.order-consult >>> .ivu-breadcrumb-item-separator {
+    color: black;
+}
+.order-step {
+    width: 80%;
+    height: auto;
+    margin: 6vh auto 0;
+    background-color: white;
+}
+.order-step-title {
+    width: 100%;
+    height: 50px;
+    background-color: #575c5c;
+    color: white;
+    padding-left: 20px;
+    font-size: 16px;
+    line-height: 50px;
+}
+.order-step-content {
+    width: 80%;
+    min-height: 300px;
+    height: auto;
+    margin: 50px auto 0;
+}
+.order-step-way {
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+}
+.order-step-content-form {
+    width: 70%;
+    margin-left: 20px;
+}
+/* .order-step-content >>> .ivu-select-dropdown {
+    width: 100%;
+}
+.order-step-content >>> .ivu-date-picker-cells {
+    margin: 10px auto;
+}
+.order-step-content >>> .ivu-picker-panel-body {
+    float: none;
+} */
 </style>

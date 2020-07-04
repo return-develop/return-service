@@ -9,7 +9,7 @@
                     <a href="/user_login" class="login-nav" v-if="!isShow">登录</a>
                     <Divider type="vertical" v-if="!isShow"/>
                     <a href="/user_register" class="register-nav" v-if="!isShow">注册</a>
-                    <span style="padding: 0 10px;color:white;line-height:36px;max-length:100px;overflow:hidden;" v-if="isShow">你好，<span style="color:#5cadff;font-weight:600;">{{username}}</span></span>
+                    <span style="padding: 0 10px;color:white;line-height:36px;max-length:100px;overflow:hidden;" v-if="isShow">你好，<span style="color:#5cadff;font-weight:600;font-size:14px">{{username}}</span></span>
                     <div class="dropdown-content" v-if="dropShow">
                         <a href="/mycenter" >个人中心</a>
                         <a @click="logout">退出登录</a>
