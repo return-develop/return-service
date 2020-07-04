@@ -156,6 +156,9 @@
     }
 </script>
 <style>
+    .container {
+        min-width: 700px;
+    }
     .header{
         width: 100%;
         height: 5em;
