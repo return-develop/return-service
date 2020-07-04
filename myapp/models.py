@@ -68,16 +68,13 @@ class Cityrelation(models.Model):
 class Work(models.Model):
     id = models.AutoField(primary_key = True)
     company_name = models.CharField(max_length = 128, default = '')
-    url = models.CharField(max_length = 256, default = '')
     name = models.CharField(max_length = 128, default = '')
     education = models.CharField(max_length = 128, default = '')
     subject = models.CharField(max_length = 128, default = '')
     place = models.CharField(max_length = 128, default = '')
-    salarylow = models.IntegerField(default = '')
-    salaryhigh = models.IntegerField(default = '')
-    info = models.CharField(max_length = 256, default = '')
-    request = models.CharField(max_length = 256, default = '')
-    interview = models.BooleanField(default = False)
+    salary = models.CharField(max_length = 128, default = '')
+    exp = models.CharField(max_length = 128, default = '')
+    info = models.CharField(max_length = 8192, default = '')
     
     def __unicode__(self):
         return self.id
@@ -95,7 +92,27 @@ class Company(models.Model):
     
     def __unicode__(self):
         return self.id
-        
+
+class Course(models.Model):
+    id = models.AutoField(primary_key = True)
+    name = models.CharField(max_length = 128, default = '')
+    teacher_id = models.IntegerField(default = 0)
+    time = models.CharField(max_length = 128, default = '')
+    originalprice = models.IntegerField(default = 0)
+    currentprice = models.IntegerField(default = 0)
+    info = models.CharField(max_length = 256, default = '')
+
+    def __unicode__(self):
+        return self.id
+
+class Teacher(models.Model):
+    id = models.AutoField(primary_key = True)
+    name = models.CharField(max_length = 128, default = '')
+    info = models.CharField(max_length = 256, default = '')
+
+    def __unicode__(self):
+        return self.id
+
 class Order(models.Model):
     orderstatus = (
         ('ready', '有效'),
@@ -103,9 +120,8 @@ class Order(models.Model):
         ('expire', '已过期'),
     )
     id = models.AutoField(primary_key = True)
-    user_id = models.IntegerField(default = 0)
-    timestart = models.DateTimeField()
-    timeend = models.DateTimeField()
+    email = models.EmailField(unique = True, default = '')
+    course_id = models.IntegerField(default = 0)
     status = models.CharField(max_length = 32, choices = orderstatus, default = '有效')
     
     def __unicode__(self):

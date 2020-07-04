@@ -79,9 +79,14 @@ WSGI_APPLICATION = 'return_service.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mysql',
-        'USER': 'root',
+        'NAME': 'return2020',
+        'HOST': 'rm-2zeom48v128as1mhipo.mysql.rds.aliyuncs.com',
+        'USER': 'reroot',
         'PASSWORD': 'return2020',
+        'PORT': '3306',
+        'OPTIONS': {
+            'charset': 'utf8mb4'
+        }
     }
 }
 
