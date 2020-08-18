@@ -59,6 +59,13 @@ urlpatterns = [
     path('cityrelation_view', views.cityrelation_view),
     path('importcsv', views.importcsv),
 
+    path('course_view',views.course_view),
+    path('teacher_view',views.teacher_view),
+    path('order_view',views.order_view),
+    path('order_add',views.order_add),
+    path('order_update',views.order_update),
+    path('order_delete',views.order_delete),
+
     # api
     url(r'^api/findback_password/$', user.logout),  #todo   
     url(r'^api/user/login/$', user.login, name = 'login'),

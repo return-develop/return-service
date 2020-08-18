@@ -15,9 +15,142 @@ from .models import Subrelation
 from .models import City
 from .models import Cityrelation
 from .models import Work
+from .models import Course
+from .models import Teacher
+from .models import Order
 
 def user_login(request):
     return render(request, 'user_login.html')
+
+def course_view(request):
+    '''查看所有的课程'''
+    dic = {}
+    if request.method == 'GET':
+        coursetemp = Course.objects.filter()
+        dic['list'] = json.loads(
+            serializers.serialize("json",coursetemp)
+        )
+        dic['flag'] = 'success'
+        dic = json.dumps(dic)
+        return HttpResponse(dic)
+    else:
+        dic['flag'] = 'fail'
+        dic = json.dumps(dic)
+        return HttpResponse(dic)
+
+def teacher_view(request):
+    '''查看所有的教师'''
+    dic ={}
+    if request.method == 'GET':
+        teachertemp = Teacher.objects.filter()
+        dic['list'] = json.loads(
+            serializers.serialize("json",teachertemp)
+        )
+        dic['flag'] = 'success'
+        dic = json.dumps(dic)
+        return HttpResponse(dic)
+    else:
+        dic['flag'] = 'fail'
+        dic = json.dumps(dic)
+        return HttpResponse(dic)
+
+def order_view(request):
+    '''查看用户的预约'''
+    info = json.loads(request.body.decode('utf8'))
+    dic = {}
+    if info != "":
+        try:
+            emailtemp = info["email"]
+            if Order.objects.filter(email__contains = emailtemp):
+                ordertemp = Order.objects.filter(email__contains = emailtemp)
+                dic['list'] = json.loads(
+                    serializers.serialize("json",ordertemp)
+                )
+                dic['flag'] = 'success'
+                dic = json.dumps(dic)
+                return HttpResponse(dic)
+        except:
+            dic['flag'] = 'fail'
+            dic = json.dumps(dic)
+            return HttpResponse(dic)
+            
+def order_add(request):
+    '''新增用户的预约'''
+    info = json.loads(request.body.decode('utf8'))
+    dic = {}
+    if info != "":
+        emailtemp = info["email"]
+        courseidtemp = info["courseid"]
+        platformtemp = info["platform"]
+        accounttemp = info["account"]
+        datetemp = info["date"]
+        timetemp = info["time"]
+        neworder = Order(email = emailtemp, course_id = courseidtemp, platform = platformtemp, account = accounttemp, date = datetemp, time = timetemp, status = 'ready')
+        try:
+            neworder.save()
+            dic['flag'] = 'success'
+            dic = json.dumps(dic)
+            return HttpResponse(dic)
+        except:
+            dic['flag'] = 'fail'
+            dic = json.dumps(dic)
+            return HttpResponse(dic)
+
+def order_update(request):
+    '''修改用户的预约'''
+    info = json.loads(request.body.decode('utf8'))
+    dic = {}
+    if info != "":
+        emailtemp = info["email"]
+        courseidtemp = info["courseid"]
+        platformtemp = info["platform"]
+        accounttemp = info["account"]
+        datetemp = info["date"]
+        timetemp = info["time"]
+        emailtempnew = info["emailnew"]
+        courseidtempnew = info["courseidnew"]
+        platformtempnew = info["platformnew"]
+        accounttempnew = info["accountnew"]
+        datetempnew = info["datenew"]
+        timetempnew = info["timenew"]
+        try:
+            alterorder = Order.objects.get(email = emailtemp, course_id = courseidtemp, platform = platformtemp, accout = accounttemp, date = datetemp, time = timetemp)
+            alterorder.email = emailtempnew
+            alterorder.course_id = courseidtempnew
+            alterorder.platform = platformtempnew
+            alterorder.account = accounttempnew
+            alterorder.date = datetempnew
+            alterorder.time = timetempnew
+            alterorder.save()
+            dic['flag'] = 'success'
+            dic = json.dumps(dic)
+            return HttpResponse(dic)
+        except:
+            dic['flag'] = 'fail'
+            dic = json.dumps(dic)
+            return HttpResponse(dic)
+
+def order_delete(request):
+    '''删除用户的预约'''
+    info = json.loads(request.body.decode('utf8'))
+    dic = {}
+    if info != "":
+        emailtemp = info["email"]
+        courseidtemp = info["courseid"]
+        platformtemp = info["platform"]
+        accounttemp = info["account"]
+        datetemp = info["date"]
+        timetemp = info["time"]
+        try:
+            deleteorder = Order.objects.get(email = emailtemp, course_id = courseidtemp, platform = platformtemp, accout = accounttemp, date = datetemp, time = timetemp)
+            deleteorder.delete()
+            dic['flag'] = 'success'
+            dic = json.dumps(dic)
+            return HttpResponse(dic)
+        except:
+            dic['flag'] = 'fail'
+            dic = json.dumps(dic)
+            return HttpResponse(dic)
 
 def user_update_password(request):
     info = json.loads(request.body.decode('utf8'))

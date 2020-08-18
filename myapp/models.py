@@ -122,6 +122,10 @@ class Order(models.Model):
     id = models.AutoField(primary_key = True)
     email = models.EmailField(unique = True, default = '')
     course_id = models.IntegerField(default = 0)
+    platform = models.CharField(max_length = 128, default = '')
+    account = models.CharField(max_length = 128, default = '')
+    date = models.CharField(max_length = 128, default = '')
+    time = models.CharField(max_length = 128, default = '')
     status = models.CharField(max_length = 32, choices = orderstatus, default = '有效')
     
     def __unicode__(self):
