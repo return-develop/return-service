@@ -153,7 +153,7 @@ export default {
             this.$emit("getCurrent", 3)
             this.modal = true
         },
-        ok () {
+        ok() {
             window.location.href = '/'
         },
         cancel() {

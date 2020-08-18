@@ -54,7 +54,7 @@
                                         <span style="padding-right:2%">{{item.date}}</span>{{item.time}}
                                     </div>
                                     <div class="consult-operate">
-                                        <a style="padding-right: 5%" @click="changeOrder(item)">更改预约</a><a>取消预约</a>
+                                        <a style="padding-right: 5%" @click="changeOrder(item)">更改预约</a><a @click="cancelOrder(item)">取消预约</a>
                                     </div>
                             </div>
                             <div v-for="item in orderCompleteList" :key=item.phone class="order-list">
@@ -62,7 +62,7 @@
                                         <span style="padding-right:2%">{{item.date}}</span>{{item.time}}
                                     </div>
                                     <div class="consult-complete-operate">
-                                        <a style="padding-right: 5%">查看预约信息</a><a>删除</a>
+                                        <a style="padding-right: 5%" @click="viewCompleteOrder(item)">查看预约信息</a><a @click="deleteCompleteOrder(item)">删除</a>
                                     </div>
                             </div>
                             <div class="add-consult"><Icon type="ios-add-circle" size="24" style="padding-right:5px"/>新增预约</div>
@@ -70,6 +70,14 @@
                     </TabPane>
                 </Tabs>
             </div>
+            <Modal
+                title="取消预约"
+                v-model="modal"
+                class-name="vertical-center-modal"
+                @on-ok="ok"
+                @on-cancel="cancel">
+                <p>是否确认<span style="color: red;font-weight:800">取消</span>预约</p>
+            </Modal>
         </div>
         <div class="order-consult" v-if="!isShow">
             <Breadcrumb class="my-crumb" separator=">>">
@@ -86,35 +94,35 @@
                     预约信息
                 </div>
                 <div class="order-step-content">
-                    <Form :label-width="120" class="order-step-content-form" :rules="ruleValidate" ref="order_info" :model="order_info">
+                    <Form :label-width="120" class="order-step-content-form" :rules="ruleValidate" ref="order_info" :model="order_info" v-model="order_info">
                         <FormItem label="课程id（可选）" style="width: 100%;">
-                            <Input v-model="order_info.courseId" placeholder="未填写课程id，将为您进行普通预约" style="margin-left:20px">
+                            <Input v-model="order_info.courseId" placeholder="未填写课程id，将为您进行普通预约" :disabled="InputLimit.id" style="margin-left:20px">
                         </FormItem>
                         <FormItem label="上课平台" style="width: 100%;" prop="platform">
-                            <RadioGroup v-model="order_info.platform" style="margin-left:20px">
+                            <RadioGroup v-model="order_info.platform" :disabled="InputLimit.platform" style="margin-left:20px">
                                 <!-- <Radio label="wechat"><img src="../../../static/img/wechat.jpg" class="order-step-way"></Radio>
                                 <Radio label="tencent"><img src="../../../static/img/tencent_meeting.jpg" class="order-step-way"></Radio>
                                 <Radio label="feishu"><img src="../../../static/img/fly_book.jpg" class="order-step-way"></Radio> -->
                                 <Radio label="wechat">微信</Radio>
-                                <Radio label="tencent">飞书</Radio>
-                                <Radio label="feishu">腾讯会议</Radio>
+                                <Radio label="feishu">飞书</Radio>
+                                <Radio label="tencent">腾讯会议</Radio>
                             </RadioGroup>
                         </FormItem>
                         <FormItem label="所选平台账号" style="width: 100%;" prop="account">
-                            <Input v-model="order_info.account" placeholder="为了方便联系您，请填写所选平台账号..." style="margin-left:20px">
+                            <Input v-model="order_info.account" placeholder="为了方便联系您，请填写所选平台账号..." :disabled="InputLimit.account" style="margin-left:20px">
                         </FormItem>
                         <FormItem label="选择时间" style="width: 100%;" prop="date">
-                            <DatePicker v-model="order_info.date" type="date" style="margin-left:20px"></DatePicker>
+                            <DatePicker v-model="order_info.date" type="date" :disabled="InputLimit.date" style="margin-left:20px"></DatePicker>
                         </FormItem>
                         <FormItem label="预约时段" style="width: 100%;" prop="time">
-                            <RadioGroup v-model="order_info.time" style="margin-left:20px">
-                                <Radio label="上午">上午</Radio>
-                                <Radio label="下午">下午</Radio>
+                            <RadioGroup v-model="order_info.time" :disabled="InputLimit.time" style="margin-left:20px">
+                                <Radio label="上午" :disabled="InputLimit.time">上午</Radio>
+                                <Radio label="下午" :disabled="InputLimit.time">下午</Radio>
                             </RadioGroup>
                         </FormItem>
-                        <FormItem style="width: 100%;">
+                        <FormItem style="width: 100%;" v-if="ifDisplayButton">
                             <Button type="primary" @click.native="submitOrder" style="margin-left:20px">{{orderType}}</Button>
-                            <Button style="margin-left: 20px" @click.native="cancelOrder">取消预约</Button>
+                            <Button style="margin-left: 20px" @click.native="cancelSubmit">取消更改</Button>
                         </FormItem>
                     </Form>
                 </div>
@@ -133,9 +141,18 @@ export default {
             username: '',
             displayTab: "tab1",
             isShow: true,   //咨询页，预约页切换
+            modal: false,  //是否显示取消预约询问
+            ifDisplayButton: true,  //是否显示按钮（用户查看已完成预约时设置为不显示）
             orderType: '确认预约',
             oldOrderInfo: {},   //用于存储需要更改的预约列表
             // isView: false,  //用户查看预约时间
+            InputLimit: {  //是否禁用
+                id: true,
+                platform: false,
+                account: false,
+                date: false,
+                time: false
+            },
             counselor: [
                 {
                     url: '../../../static/img/curry.jpg',
@@ -155,7 +172,7 @@ export default {
             ],
             course: [
                 {
-                    id: '1111',
+                    courseId: '1111',
                     url: '../../../static/img/curry.jpg',
                     title: '体验式免费咨询',
                     price: '0.00',
@@ -166,7 +183,7 @@ export default {
                     isView: false
                 },
                 {
-                    id: '2222',
+                    courseId: '2222',
                     url: '../../../static/img/curry.jpg',
                     title: '体验式免费咨询',
                     price: '0.00',
@@ -177,7 +194,7 @@ export default {
                     isView: false
                 },
                 {
-                    id: '1234',
+                    courseId: '1234',
                     url: '../../../static/img/curry.jpg',
                     title: '体验式免费咨询',
                     price: '0.00',
@@ -190,21 +207,21 @@ export default {
             ],
             orderList: [
                 {
-                    courseID: '',
+                    courseId: '',
                     platform: 'feishu',
                     account: "12345679",
                     date: '2020-06-29',
                     time: '上午'
                 },
                 {
-                    courseID: '',
+                    courseId: '',
                     platform: 'wechat',
                     account: "12345678",
                     date: '2020-06-30',
                     time: '上午'
                 },
                 {
-                    courseID: '',     
+                    courseId: '',     
                     platform: 'tencent',
                     account: "12345679",
                     date: '2020-7-1',
@@ -266,14 +283,23 @@ export default {
         }
     },
     methods: {
+        resetForm(info) {
+            for (var item in info) {
+                info[item] = ''
+            }
+        },
+        resetInputLimit() {
+            this.InputLimit.courseId = true
+            this.InputLimit.platform = false
+            this.InputLimit.account = false
+            this.InputLimit.date = false
+            this.InputLimit.time = false
+        },
         submitOrder() {
+            console.log("这是order")
+            console.log(this.order_info)
             // console.log("写改后" + this.formTop.birthday)
             // console.log(this.formTop)
-            if (this.orderType === '更改预约') {
-                for (var item in this.order_info) {
-                    this.oldOrderInfo[item] = this.order_info[item]
-                }
-            }
             this.$refs['order_info'].validate((valid) => {
                 if (valid) {
                     this.infoValid = true;
@@ -284,9 +310,7 @@ export default {
             if(this.infoValid == true) {
                 var d = new Date(this.order_info.date);
                 this.order_info.date = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate()
-                console.log(this.order_info.date)
-                console.log(this.order_info)
-                // email = getCookieValue('email')
+                // email = getCookieValue()
                 // let res = await fetchBase('/order_info', {
                 //         content: this.order_info
                 //     })
@@ -307,46 +331,106 @@ export default {
                     }
                     if (isChange) {
                         for (var item in this.orderList) {
+                            console.log(this.orderList[item])
                             if (JSON.stringify(this.oldOrderInfo) == JSON.stringify(this.orderList[item])) {
                                 this.orderList.splice(item, 1)
                             }
                         }
                     }
+                    this.orderType = '确认预约'
                 }
-                var that = this
-                setTimeout(function () {
-                    that.orderList.push(that.order_info)
-                    that.isShow = true
+                setTimeout(function () {  
                 }, 1000)
-                this.$refs['order_info'].resetFields()
+                var newOrderInfo = {}
+                for (var item in this.order_info) {
+                    newOrderInfo[item] = this.order_info[item]
+                }
+                this.orderList.push(newOrderInfo)
+                this.isShow = true
+                this.resetForm(this.order_info)
+                this.resetForm(this.oldOrderInfo)
+                this.resetInputLimit()
+                // this.$refs['order_info'].resetFields()
                 console.log(this.order_info)
             }
             
         },
-        cancelOrder() {
-            this.$refs['order_info'].resetFields();
+        cancelSubmit() {
+            this.resetForm(this.order_info)
+            this.resetForm(this.oldOrderInfo)
+            this.resetInputLimit()
+            this.isShow = true
         },
-        viewOrderTime(item) {
+        viewOrderTime(item) {  
             item.isView = true
         },
         onOrder(item) {
             this.order_info.date = item.date
             this.order_info.time = item.time
-            this.order_info.courseId = item.id
+            this.order_info.courseId = item.courseId
+            if (item.courseId != '') {
+                this.InputLimit.date = true
+                this.InputLimit.time = true
+            }
             this.isShow = false
+            this.ifDisplayButton = true
+            this.orderType = '确认预约'
             this.displayTab = 'tab2'
         },
         changeOrder(info) {
             for (var item in info) {
                 this.order_info[item] = info[item]
+                this.oldOrderInfo[item] = info[item]
             }
+            if (info.courseId != '') {
+                this.InputLimit.date = true
+                this.InputLimit.time = true
+            }
+            console.log(this.order_info)
             this.isShow = false
+            this.ifDisplayButton = true
             this.orderType = '更改预约'
             // console.log(this.orderList[0])
             // console.log(this.orderList[1])
             // console.log(this.orderList[2])
             // console.log(JSON.stringify(this.orderList[0]) == JSON.stringify(this.orderList[1]))
             // console.log(JSON.stringify(this.orderList[0]) == JSON.stringify(this.orderList[2]))
+        },
+        cancelOrder(info) {
+            this.modal = true
+            for (var item in info) {
+                this.oldOrderInfo[item] = info[item]
+            }
+        },
+        ok() {
+            for (var item in this.orderList) {
+                if (JSON.stringify(this.oldOrderInfo) == JSON.stringify(this.orderList[item])) {
+                    this.orderList.splice(item, 1)
+                }
+            }
+            this.resetForm(this.oldOrderInfo)
+            this.modal = false
+        },
+        cancel() {
+            this.resetForm(this.oldOrderInfo)
+            this.modal = false
+        },
+        viewCompleteOrder(info) {
+            for (var item in info) {
+                this.order_info[item] = info[item]
+            }
+            for (var item in this.InputLimit) {
+                this.InputLimit[item] = true
+            }
+            this.isShow = false
+            this.ifDisplayButton = false
+        },
+        deleteCompleteOrder(info) {
+            for (var item in this.orderCompleteList) {
+                if (JSON.stringify(info) == JSON.stringify(this.orderCompleteList[item])) {
+                    this.orderCompleteList.splice(item, 1)
+                }
+            }
         }
     }
 }
@@ -570,6 +654,12 @@ export default {
 }
 .order-consult >>> .ivu-form-item-error-tip {
     margin-left: 20px;
+}
+.vertical-center-modal {
+    /* margin-top: 20vh; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 /* .order-step-content >>> .ivu-select-dropdown {
     width: 100%;
